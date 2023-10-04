@@ -10,12 +10,13 @@ start() {
         cd ./api
         nohup node ./node_modules/.bin/nodemon index.js &
         echo $! >> ../.b_pids.tmp
-    ) > start.log
+    ) > .api-start-log.tmp
     (
         cd ./ui
         nohup node ./node_modules/react-scripts/scripts/start.js &  
         echo $! >> ../.b_pids.tmp
-    ) > start.log
+    ) > .ui-start-log.tmp
+    cat .api-start-log.tmp | cat .ui-start-log.tmp > start.log; rm .*log.tmp
 }
 stop() {
     if test -f ./.b_pids.tmp

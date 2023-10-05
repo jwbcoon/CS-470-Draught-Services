@@ -1,6 +1,20 @@
 #!/bin/bash
 
 usage() { echo "Usage: $0 [start | restart | stop]" 1>&2; exit 1; }
+
+loadtables() {
+    echo "running load tables"
+    for file in ./database/defs/*.sql
+    do
+        psql -U lej -d draught_services -a -f $file -W password
+    done
+
+    for file in ./database/dumps/*.sql
+    do
+        psql -U lej -d draught_services -a -f $file -W password
+    done
+}
+
 start() {
     if test -f ./.b_pids.tmp
     then
@@ -8,7 +22,7 @@ start() {
     fi
     (
         cd ./api
-        nohup node ./node_modules/.bin/nodemon index.js &
+        nohup node api_server.js &
         echo $! >> ../.b_pids.tmp
     ) > .api-start-log.tmp
     (
@@ -18,6 +32,7 @@ start() {
     ) > .ui-start-log.tmp
     cat .api-start-log.tmp | cat .ui-start-log.tmp > start.log; rm .*log.tmp
 }
+
 stop() {
     if test -f ./.b_pids.tmp
     then
@@ -28,14 +43,19 @@ stop() {
 
 case $1 in
         start)
+            #loadtables
             start
             ;;
         restart)
             stop
+            #loadtables
             start
             ;;
         stop)
             stop
+            ;;
+        load)
+            loadtables
             ;;
         *)
             usage

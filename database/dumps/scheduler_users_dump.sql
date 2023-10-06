@@ -16,34 +16,20 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `scheduler_users`
+-- Table structure for table "scheduler_-- users"
 --
 
-DROP TABLE IF EXISTS `scheduler_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `scheduler_users` (
-  `user_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `user_fName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `user_mName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `user_lName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `department` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `subject` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `role` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`user_id`,`department`,`subject`),
-  KEY `scheduler_users_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `scheduler_users`
+-- Dumping data for table "scheduler_-- users"
 --
 
-LOCK TABLES `scheduler_users` WRITE;
-/*!40000 ALTER TABLE `scheduler_users` DISABLE KEYS */;
-INSERT INTO `scheduler_users` VALUES ('ali.kooshesh','Ali','A','Kooshesh','ComputerScience','CS','admin');
-/*!40000 ALTER TABLE `scheduler_users` ENABLE KEYS */;
-UNLOCK TABLES;
+LOCK TABLES "scheduler_-- users" WRITE;
+/*!40000 ALTER TABLE "scheduler_-- users" DISABLE KEYS */;
+INSERT INTO "scheduler_-- users" VALUES ('ali.kooshesh','Ali','A','Kooshesh','ComputerScience','CS','admin');
+/*!40000 ALTER TABLE "scheduler_-- users" ENABLE KEYS */;
+COMMIT;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

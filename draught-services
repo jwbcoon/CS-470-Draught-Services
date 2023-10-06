@@ -1,17 +1,18 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 [start | restart | stop]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [load | start | restart | stop]" 1>&2; exit 1; }
 
 loadtables() {
     echo "running load tables"
-    for file in ./database/defs/*.sql
+    psql -U lej -d draught_services -a -f ./database/ssi_database.sql
+    for file in ./database/schemas/*.sql
     do
-        psql -U lej -d draught_services -a -f $file -W password
+        psql -U lej -d draught_services -a -f $file
     done
 
     for file in ./database/dumps/*.sql
     do
-        psql -U lej -d draught_services -a -f $file -W password
+        psql -U lej -d draught_services -a -f $file
     done
 }
 
@@ -24,13 +25,14 @@ start() {
         cd ./api
         nohup node api_server.js &
         echo $! >> ../.b_pids.tmp
-    ) > .api-start-log.tmp
+    ) > ./logs/.api-start-log.tmp
     (
         cd ./ui
         nohup node ./node_modules/react-scripts/scripts/start.js &  
         echo $! >> ../.b_pids.tmp
     ) > .ui-start-log.tmp
-    cat .api-start-log.tmp | cat .ui-start-log.tmp > start.log; rm .*log.tmp
+    cat ./logs/.api-start-log.tmp | cat ./logs/.ui-start-log.tmp > ./logs/start.log
+    rm ./logs/.*log.tmp
 }
 
 stop() {
@@ -43,12 +45,10 @@ stop() {
 
 case $1 in
         start)
-            #loadtables
             start
             ;;
         restart)
             stop
-            #loadtables
             start
             ;;
         stop)

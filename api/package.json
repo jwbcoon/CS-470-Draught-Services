@@ -23,7 +23,8 @@
     "koa-jwt": "^3.3.2",
     "koa-router": "^7.3.0",
     "lodash": "^4.17.4",
-    "pg": "^7.1.2"
+    "pg": "^7.1.2",
+    "pg-format": "^1.0.4"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"

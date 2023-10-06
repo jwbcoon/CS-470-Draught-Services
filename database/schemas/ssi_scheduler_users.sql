@@ -15,22 +15,34 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-SET NAMES utf8mb4;
-
 --
--- Table structure for table "scheduler_-- -- users"
+-- Table structure for table "scheduler_-- users"
 --
 
+DROP TABLE IF EXISTS "scheduler_users";
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE "scheduler_users" (
+  "user_id" varchar(100) NOT NULL,
+  "user_fName" varchar(40) NOT NULL,
+  "user_mName" varchar(40) DEFAULT NULL,
+  "user_lName" varchar(40) NOT NULL,
+  "department" varchar(50) NOT NULL,
+  "subject" varchar(8) NOT NULL,
+  "role" varchar(10) NOT NULL,
+  PRIMARY KEY ("user_id","department","subject")
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
+CREATE INDEX "scheduler_users_user_id" on "scheduler_users"("user_id");
 
 --
--- Dumping data for table "scheduler_-- -- users"
+-- Dumping data for table "scheduler_-- users"
 --
 
 BEGIN;
-/*!40000 ALTER TABLE "scheduler_-- -- users" DISABLE KEYS */;
-INSERT INTO "scheduler_users" VALUES ('Ali.Kooshesh','Ali','A','Kooshesh','ComputerScience','CS','admin'),('Carina.Fitzpatrick','Carina',NULL,'Fitzpatrick','Draught Matters','CS','admin'),('Lester.Barroso','Lester',NULL,'Barroso','ComputerScience','CS','admin');
-/*!40000 ALTER TABLE "scheduler_-- -- users" ENABLE KEYS */;
+/*!40000 ALTER TABLE "scheduler_-- users" DISABLE KEYS */;
+INSERT INTO "scheduler_users" VALUES ('Carina.Fitzpatrick','Carina',NULL,'Fitzpatrick','Draught Matters','CS','admin'),('Lester.Barroso','Lester',NULL,'Barroso','ComputerScience','CS','admin');
+/*!40000 ALTER TABLE "scheduler_-- users" ENABLE KEYS */;
 COMMIT;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

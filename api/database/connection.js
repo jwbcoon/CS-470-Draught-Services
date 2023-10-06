@@ -1,4 +1,6 @@
 const {Client} = require('pg');
+const path = require('path');
+require('dotenv').config();
 
 /*
 var connection = mysql.createConnection({
@@ -15,18 +17,18 @@ var connection = mysql.createConnection({
 const connection = new Client({
 //    debug: true,
 
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'lej',
-    password: 'password',
-    database: 'draught_services'
+    host: process.env.HOST,
+    port: process.env.PORT,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE 
 });
 connection.connect((err) => {
     if (err) {
         console.log(err);
     }
     else {
-        console.log('SUCCESSFUL CONNECTION');
+        console.log(`Successful connection on port ${process.env.PORT}`);
     }
 });
 

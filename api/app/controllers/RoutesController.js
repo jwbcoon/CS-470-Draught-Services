@@ -1,6 +1,7 @@
 const dbConnection = require('../../database/connection');
 const dateFormat = require('dateformat');
 const buildStudentViewFromCourses = require('../schema/buildStudentViewFromCourses');
+const pformat = require('pg-format');
 
 function now() {
     return dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
@@ -9,20 +10,18 @@ function now() {
 const allRoutes = async (ctx) => {
     console.log('routes all routes called.');
     return new Promise((resolve, reject) => {
-        const query = `
+        const query = pformat(`
                        SELECT *
                         FROM 
                             routes
-                        ORDER BY routeName
-                        `;
-        dbConnection.query({
-            sql: query,
-        }, (error, tuples) => {
+                        ORDER BY %I
+                        `, 'routeName');
+        dbConnection.query(query, (error, tuples) => {
             if (error) {
                 console.log("Connection error in RoutesController::allRoutes", error);
                 return reject(error);
             }
-            ctx.body = tuples;
+            ctx.body = tuples['rows'];
             ctx.status = 200;
             return resolve();
         });
@@ -37,18 +36,15 @@ const allRoutes = async (ctx) => {
 
 const routeWithRouteID = (ctx) => {
         return new Promise((resolve, reject) => {
-            const query = `
+            const query = pformat(`
                        SELECT *
                         FROM 
                             routes
                         WHERE 
-                            routeID = ?
-                        ORDER BY routeName
-                        `;
-            dbConnection.query({
-                sql: query,
-                values: [ctx.params.routeID]
-            }, (error, tuples) => {
+                            routeID = %L
+                        ORDER BY %I
+                        `, ctx.params.routeID, 'routeName');
+            dbConnection.query(query, (error, tuples) => {
                 if (error) {
                     console.log("Connection error in RoutesController::routeWithRouteID", error);
                     ctx.body = [];

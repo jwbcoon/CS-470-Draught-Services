@@ -1,6 +1,6 @@
 -- This is an automatically generated file. Do not edit directly.
 
--- use draught_services;
+-- -- -- usedraught_services;
 DROP TABLE IF EXISTS accounts CASCADE;
 
 CREATE TABLE "accounts" (

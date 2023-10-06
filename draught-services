@@ -30,7 +30,7 @@ start() {
         cd ./ui
         nohup node ./node_modules/react-scripts/scripts/start.js &  
         echo $! >> ../.b_pids.tmp
-    ) > .ui-start-log.tmp
+    ) > ./logs/.ui-start-log.tmp
     cat ./logs/.api-start-log.tmp | cat ./logs/.ui-start-log.tmp > ./logs/start.log
     rm ./logs/.*log.tmp
 }

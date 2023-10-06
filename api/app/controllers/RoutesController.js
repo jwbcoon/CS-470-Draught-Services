@@ -1,4 +1,4 @@
-const dbConnection = require('../../database/mySQLconnect');
+const dbConnection = require('../../database/connection');
 const dateFormat = require('dateformat');
 const buildStudentViewFromCourses = require('../schema/buildStudentViewFromCourses');
 

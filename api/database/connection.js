@@ -1,4 +1,4 @@
-var mysql      = require('mysql');
+const {Client} = require('pg');
 
 /*
 var connection = mysql.createConnection({
@@ -12,14 +12,22 @@ var connection = mysql.createConnection({
 });
 */
 
-var connection = mysql.createConnection({
+const connection = new Client({
 //    debug: true,
 
-    host: 'localhost',
+    host: '127.0.0.1',
     port: 3306,
     user: 'lej',
     password: 'password',
     database: 'draught_services'
+});
+connection.connect((err) => {
+    if (err) {
+        console.log(err);
+    }
+    else {
+        console.log('SUCCESSFUL CONNECTION');
+    }
 });
 
 module.exports = connection;

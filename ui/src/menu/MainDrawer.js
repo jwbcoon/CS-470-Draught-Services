@@ -194,7 +194,6 @@ export default function MainDraswer({title, user, logoutAction}) {
                                            menuItemTitles={presentationComponents().map(comp => comp.title)}
                     />
                 </List>
-               
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />

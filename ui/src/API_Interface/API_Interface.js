@@ -41,8 +41,8 @@ export default class APIInterface {
         return axiosAgent.get(`routes/${routeID}`);
     }
 
-    async getViewSelectionData(selection) {
-        return axiosAgent.get(`view-update/${selection}`)
+    async getViewSelectionData(selectedItem) {
+        return axiosAgent.get(`view-update/${selectedItem}`)
     }
 
     async getTransactionCountPerCycle(cycleID) {

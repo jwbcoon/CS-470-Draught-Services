@@ -1,5 +1,4 @@
 const dbConnection = require('../../database/connection');
-const dateFormat = require('dateformat');
 const pformat = require('pg-format');
 
 function validSelection(ctx) {
@@ -15,8 +14,9 @@ function validSelection(ctx) {
 
 
 const getViewSelectionData = async ctx => {
+    console.log(validSelection(ctx).replace(/s$/, 'ID'));
     return new Promise((resolve, reject) => {
-        const query = pformat('select * from %I', validSelection(ctx));
+        const query = pformat('select %I from %I', validSelection(ctx).replace(/s$/, 'ID'), validSelection(ctx));
         dbConnection.query(query, (error, tuples) => {
             if (error) {
                 console.log("Connection error in TableViewController::getViewSelectionData", error);

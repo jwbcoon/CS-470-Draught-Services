@@ -71,6 +71,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const TopBar = ({open, selectedItem, setViewColumns, viewColumns, handleDrawerOpen, title, user, logoutAction}) => {
     // This component is responsible for rendering the Toolbar that is drawn
     // at the top of the drawer.
+    console.log(`In TopBar: selectedItem is ${selectedItem}`);
 
     return (
         <Fragment>
@@ -93,11 +94,9 @@ const TopBar = ({open, selectedItem, setViewColumns, viewColumns, handleDrawerOp
                             {user.unpack()}
                         </Typography>
                     </Box>
-        {open ? 
-            (viewColumns
-            ? <SortSelect selectedItem={selectedItem} setViewColumns={setViewColumns} viewColumns={viewColumns}/>
-            : <Fragment/>)
-                : <Fragment/>}
+                    {open
+                      ? <SortSelect selectedItem={selectedItem} setViewColumns={setViewColumns} viewColumns={viewColumns}/>
+                      : <Fragment/>}
                     <Box width="100%" justifyContent="right" flex={1}>
                         <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
                             Logout

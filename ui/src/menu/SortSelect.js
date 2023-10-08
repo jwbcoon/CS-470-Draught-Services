@@ -1,7 +1,6 @@
 import {useEffect, Fragment} from 'react';
-import {Grid, Button} from '@mui/material';
+import {Grid, Box} from '@mui/material';
 import API from '../API_Interface/API_Interface.js';
-import * as DBcolumns from '../components/dbcolumns.js';
 
 const SortSelect = ({viewColumns, setViewColumns, selectedItem}) => {
     console.log(`In SortSelect: selectedItem is ${selectedItem.toLowerCase()}`);
@@ -16,11 +15,11 @@ const SortSelect = ({viewColumns, setViewColumns, selectedItem}) => {
             setViewColumns(viewSelJSONData.data);
         }
 
-        if (selectedItem !== 'Summary') getViewSelection();
+        if (!selectedItem.match(  /[sS]ummary/)) getViewSelection();
     }, [selectedItem, setViewColumns]);
 
     console.log(JSON.stringify(viewColumns));
-    if (selectedItem === 'Summary' || viewColumns === undefined) return <Fragment/>
+    if (!selectedItem.match(/[sS]ummary/) || viewColumns === undefined) return <Fragment/>
     return (
         <Grid container>
             {
@@ -30,7 +29,9 @@ const SortSelect = ({viewColumns, setViewColumns, selectedItem}) => {
                             key={idx}
                             xs={1}
                         >
-                          <Button>{colName}</Button>
+                          <Box sx={{ height: '100%', width: '100%', backgroundColor: 'white', borderWidth: '1px', borderStyle: 'solid', borderColor: 'black' }}>
+                              {colName}
+                          </Box>
                       </Grid>
                   )
                })

@@ -2,19 +2,12 @@ const dbConnection = require('../../database/connection');
 const pformat = require('pg-format');
 
 function validSelection(ctx) {
-    if (ctx.params.accounts)
-      return ctx.params.accounts;
-    if (ctx.params.markets)
-      return ctx.params.markets;
-    if (ctx.params.routes)
-      return ctx.params.routes;
-    if (ctx.params.transactions)
-      return ctx.params.transactions;
+    if (ctx.params.selected_item.match(/(accounts)|(markets)|(routes)|(transactions)/))
+        return ctx.params.selected_item;
 }
 
 
 const getViewSelectionData = async ctx => {
-    console.log(validSelection(ctx).replace(/s$/, 'ID'));
     return new Promise((resolve, reject) => {
         const query = pformat('select %I from %I', validSelection(ctx).replace(/s$/, 'ID'), validSelection(ctx));
         dbConnection.query(query, (error, tuples) => {

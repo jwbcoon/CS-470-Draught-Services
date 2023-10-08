@@ -42,8 +42,7 @@ const tableViewRouter = require('koa-router') ({
     prefix: '/view-update'
 });
 
-tableViewRouter.get('/', TableViewController.getSummary, err => console.log(`draught_services_routes.js: ${err}`));
-tableViewRouter.get('/transactions/:cycleID', TableViewController.getTransactionCPCView, err => console.log(`draught_services_routes.js: ${err}`));
+tableViewRouter.get('/:selection', TableViewController.getViewSelectionData, err => console.log(`draught_services_routes.js: ${err}`));
 
 // Routes router configuration.
 

@@ -19,7 +19,7 @@ export default function Main() {
         <Fragment>
             {
                 user !== undefined ? (
-                    <App user={user} dbcolumns={viewColumns}
+                    <App user={user} viewColumns={viewColumns}
                          setViewColumns={setViewColumns} logoutAction={logout(setUser)} />
                 ) : (
                     <Login user={user} setUser={setUser} />

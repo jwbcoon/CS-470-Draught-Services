@@ -2,28 +2,27 @@ import {useState, useEffect} from 'react';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import API from '../API_Interface/API_Interface.js';
+import * as DBcolumns from '../components/dbcolumns.js';
 
-const SortSelect = ({dbcolumns, setViewColumns, selectedItem}) => {
+const SortSelect = ({viewColumns, setViewColumns, selectedItem}) => {
 
     useEffect(() => {
         const api = new API();
 
-        async function getListSelection(cycleID) {
-            const transactionsJSONString = await api.getTransactionCountPerCycle(cycleID);
-            console.log(`transactions from the DB ${JSON.stringify(transactionsJSONString)}`);
-            setViewColumns(transactionsJSONString.data);
+        async function getListSelection() {
+            const viewSelJSONData = await api.getViewSelectionData();
+            console.log(`summary from the API_Interface ${JSON.stringify(viewSelJSONData)}`);
+            setViewColumns(viewSelJSONData.data);
         }
 
-        if (selectedItem === 'Transactions') {
-          getListSelection(281);
-        }
+        getListSelection();
     }, [selectedItem]);
 
-    console.log(JSON.stringify(dbcolumns));
+    console.log(JSON.stringify(viewColumns));
     return (
         <Grid container>
             {
-               dbcolumns.map((colName, idx) => {
+               viewColumns.map((colName, idx) => {
                    <Grid item
                          key={idx}
                          xs={1}

@@ -68,7 +68,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-const TopBar = ({open, listSelection, setViewColumns, dbcolumns, handleDrawerOpen, title, user, logoutAction}) => {
+const TopBar = ({open, selectedItem, setViewColumns, viewColumns, handleDrawerOpen, title, user, logoutAction}) => {
     // This component is responsible for rendering the Toolbar that is drawn
     // at the top of the drawer.
 
@@ -93,7 +93,11 @@ const TopBar = ({open, listSelection, setViewColumns, dbcolumns, handleDrawerOpe
                             {user.unpack()}
                         </Typography>
                     </Box>
-        {open ? <SortSelect listSelection={listSelection} setViewColumns={setViewColumns} dbcolumns={dbcolumns}/> : <Fragment/>}
+        {open ? 
+            (viewColumns
+            ? <SortSelect selectedItem={selectedItem} setViewColumns={setViewColumns} viewColumns={viewColumns}/>
+            : <Fragment/>)
+                : <Fragment/>}
                     <Box width="100%" justifyContent="right" flex={1}>
                         <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
                             Logout
@@ -149,7 +153,7 @@ const findSelectedComponent = (selectedItem) => {
     }
 };
 
-export default function MainDrawer({title, user, dbcolumns, setViewColumns, logoutAction}) {
+export default function MainDrawer({title, user, viewColumns, setViewColumns, logoutAction}) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [selectedItem, setSelectedItem] = useState('Summary');
@@ -171,7 +175,7 @@ export default function MainDrawer({title, user, dbcolumns, setViewColumns, logo
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <TopBar title={title} open={open} dbcolumns={dbcolumns}
+            <TopBar title={title} open={open} viewColumns={viewColumns}
                     handleDrawerOpen={handleDrawerOpen} user={user}
                     logoutAction={logoutAction}
                     selectedItem={selectedItem}

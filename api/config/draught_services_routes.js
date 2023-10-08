@@ -37,6 +37,14 @@ const loginRouter = require('koa-router')({
 });
 loginRouter.get('/:user_id', LoginController.authorizeUser, (err) => console.log("draught_services_routes.js: login-route error:", err));
 
+const TableViewController = require('../app/controllers/TableViewController.js');
+const tableViewRouter = require('koa-router') ({
+    prefix: '/view-update'
+});
+
+tableViewRouter.get('/', TableViewController.getSummary, err => console.log(`draught_services_routes.js: ${err}`));
+tableViewRouter.get('/transactions/:cycleID', TableViewController.getTransactionCPCView, err => console.log(`draught_services_routes.js: ${err}`));
+
 // Routes router configuration.
 
 const RoutesController = require('../app/controllers/RoutesController.js');

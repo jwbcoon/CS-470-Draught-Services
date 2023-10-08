@@ -41,4 +41,8 @@ export default class APIInterface {
         return axiosAgent.get(`routes/${routeID}`);
     }
 
+    async getTransactionCountPerCycle(cycleID) {
+        return axiosAgent.get(`transactions/${cycleID}`);
+    }
+
 }

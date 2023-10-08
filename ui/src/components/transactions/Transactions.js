@@ -69,31 +69,51 @@ const transactionsTableAttributes = [
     }
 ];
 
+const transactionTable = tableType => {
+    if (tableType.match(/cycleCount/))
+        return [
+         {
+            title: 'Cycle ID',
+            attributeDBName: 'cycleID',
+            align: 'left'
+        },
+        {
+            title: 'Total Transactions',
+            attributeDBName: 'tot_transactions',
+            align: 'left'
+        }
+    ];
+    else
+        return transactionsTableAttributes;
+}
+
+
 export default function TransactionTable(props) {
 
 
     const [transactions, setTransactions] = useState([]);
     console.log(`in TransactionTable contains ${JSON.stringify(transactions)}`);
+    const cycleID = 300;
 
 
     useEffect(() => {
         const api = new API();
 
         async function getTransactions() {
-            const transactionsJSONString = await api.allRoutes();
+            const transactionsJSONString = await api.getTransactionCountPerCycle(cycleID);
             console.log(`transactions from the DB ${JSON.stringify(transactionsJSONString)}`);
             setTransactions(transactionsJSONString.data);
         }
 
         getTransactions();
-    }, []);
+    }, [cycleID]);
 
     const TRow = ({transactionObject}) => {
         return <TableRow
             sx={{'&:last-child td, &:last-child th': {border: 0}}}
         >
             {
-                transactionsTableAttributes.map((attr, idx) =>
+                transactionTable('cycleCount').map((attr, idx) =>
                     <TableCell key={idx}
                                align={attr.align}>
                         {
@@ -112,7 +132,7 @@ export default function TransactionTable(props) {
                         <TableHead>
                             <TableRow>
                                 {
-                                    transactionsTableAttributes.map((attr, idx) =>
+                                    transactionTable('cycleCount').map((attr, idx) =>
                                         <TableCell  key={idx}
                                                     align={attr.align}>
                                             {attr.title}
@@ -122,8 +142,8 @@ export default function TransactionTable(props) {
                         </TableHead>
                         <TableBody>
                             {
-                                transactions.map((route, idx) => (
-                                    <TRow transactionObject={route} key={idx}/>
+                                transactions.map((transaction, idx) => (
+                                    <TRow transactionObject={transaction} key={idx}/>
                                 ))
                             }
                         </TableBody>

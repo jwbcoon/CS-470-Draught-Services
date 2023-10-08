@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -17,7 +17,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import {presentationComponents, containerComponents}  from './MenuPresentationComponents';
+import SortSelect from './SortSelect';
 import Button from "@mui/material/Button";
+import API from '../API_Interface/API_Interface.js';
 
 const drawerWidth = 240;
 
@@ -66,7 +68,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-const TopBar = ({open, handleDrawerOpen, title, user, logoutAction}) => {
+const TopBar = ({open, listSelection, setViewColumns, dbcolumns, handleDrawerOpen, title, user, logoutAction}) => {
     // This component is responsible for rendering the Toolbar that is drawn
     // at the top of the drawer.
 
@@ -88,9 +90,10 @@ const TopBar = ({open, handleDrawerOpen, title, user, logoutAction}) => {
                     </Typography>
                     <Box width="100%" justifyContent="center" flex={1}>
                         <Typography variant="h6" noWrap component="div" align="center">
-                            {user}
+                            {user.unpack()}
                         </Typography>
                     </Box>
+        {open ? <SortSelect listSelection={listSelection} setViewColumns={setViewColumns} dbcolumns={dbcolumns}/> : <Fragment/>}
                     <Box width="100%" justifyContent="right" flex={1}>
                         <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
                             Logout
@@ -146,7 +149,7 @@ const findSelectedComponent = (selectedItem) => {
     }
 };
 
-export default function MainDraswer({title, user, logoutAction}) {
+export default function MainDrawer({title, user, dbcolumns, setViewColumns, logoutAction}) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [selectedItem, setSelectedItem] = useState('Summary');
@@ -168,7 +171,11 @@ export default function MainDraswer({title, user, logoutAction}) {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <TopBar title={title} open={open} handleDrawerOpen={handleDrawerOpen} user={user} logoutAction={logoutAction} />
+            <TopBar title={title} open={open} dbcolumns={dbcolumns}
+                    handleDrawerOpen={handleDrawerOpen} user={user}
+                    logoutAction={logoutAction}
+                    selectedItem={selectedItem}
+                    setViewColumns={setViewColumns}/>
             <Drawer
                 sx={{
                     width: drawerWidth,

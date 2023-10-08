@@ -13,6 +13,17 @@ export default function Login({setUser}) {
     const [verifyUser, setVerifyUser] = useState(false);
     const [authFailed, setAuthFailed] = useState(false);
 
+    const makeUserName = ({user_fName, user_mName, user_lName}) => {
+
+        console.log(`making user name with: ${user_fName} : ${user_mName} : ${user_lName}`);
+        const middleName = () => user_mName !== undefined && user_mName !== null  
+                            ? `${user_mName.length === 1 ? user_mName[0] + '.' : user_mName}` 
+                            : '';
+
+        return `${user_fName} ${middleName()} ${user_lName}`;
+    };
+
+
 
     const handleInputChange = event => {
         console.log("handleInputChange called.");
@@ -39,7 +50,7 @@ export default function Login({setUser}) {
             api.getUserInfo(userInput)
                 .then( userInfo => {
                 console.log(`api returns user info and it is: ${JSON.stringify(userInfo)}`);
-                const user = userInfo.user;
+                const user = { ...userInfo.user[0], unpack: () => makeUserName(userInfo.user[0]) };
                 if( userInfo.status === "OK" ) {
                     setUser(user);
                 } else  {

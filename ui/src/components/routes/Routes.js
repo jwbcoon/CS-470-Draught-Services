@@ -1,5 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react';
-import API from '../../API_Interface/API_Interface'
+import API from '../../API_Interface/API_Interface';
+import {routesTableAttributes} from '../DBattrs.js';
 
 
 import Table from '@mui/material/Table';
@@ -10,29 +11,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-
-const routesTableAttributes = [
-    {
-        title: 'Route Name',
-        attributeDBName: 'routeName',
-        align: 'left'
-    },
-    {
-        title: 'Route ID',
-        attributeDBName: 'routeID',
-        align: 'left'
-    },
-    {
-        title: 'Cycle ID',
-        attributeDBName: 'cycleID',
-        align: 'left'
-    },
-    {
-        title: 'Date Created',
-        attributeDBName: 'dateCreated',
-        align: 'left'
-    }
-];
 
 export default function RouteTable(props) {
 

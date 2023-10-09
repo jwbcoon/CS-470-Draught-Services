@@ -1,6 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import API from '../../API_Interface/API_Interface'
-import {transactionsTableAttributes} from '../dbcolumns.js';
+import {transactionsTableAttributes} from '../DBattrs.js';
 
 
 import Table from '@mui/material/Table';

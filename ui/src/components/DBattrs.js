@@ -1,17 +1,7 @@
 const accountsTableAttributes = [
     {
-        title: 'Account ID',
-        attributeDBName: 'accountID',
-        align: 'left'
-    },
-    {
-        title: 'Transaction Date',
-        attributeDBName: 'transactionDate',
-        align: 'left'
-    },
-    {
-        title: 'Employee ID',
-        attributeDBName: 'employeeID',
+        title: 'Account Name',
+        attributeDBName: 'accountName',
         align: 'left'
     },
     {
@@ -20,18 +10,78 @@ const accountsTableAttributes = [
         align: 'left'
     },
     {
-        title: 'Product ID',
-        attributeDBName: 'productID',
-        align: 'left'
-    },
-    {
-        title: 'Distributor ID',
-        attributeDBName: 'distributorID',
+        title: 'Route ID',
+        attributeDBName: 'routeID',
         align: 'left'
     },
     {
         title: 'Market ID',
         attributeDBName: 'marketID',
+        align: 'left'
+    },
+    {
+        title: 'Status',
+        attributeDBName: 'status',
+        align: 'left'
+    },
+    {
+        title: 'Date Created',
+        attributeDBName: 'dateCreated',
+        align: 'left'
+    },
+    {
+        title: 'Last Modified',
+        attributeDBName: 'lastModified',
+        align: 'left'
+    }
+]
+
+
+
+const marketsTableAttributes = [
+    {
+        title: 'Market ID',
+        attributeDBName: 'marketID',
+        align: 'left'
+    },
+    {
+        title: 'Market Name',
+        attributeDBName: 'marketName',
+        align: 'left'
+    },
+    {
+        title: 'City',
+        attributeDBName: 'city',
+        align: 'left'
+    },
+    {
+        title: 'State',
+        attributeDBName: 'state',
+        align: 'left'
+    },
+    {
+        title: 'Status',
+        attributeDBName: 'status',
+        align: 'left'
+    },
+    {
+        title: 'Last Modified',
+        attributeDBName: 'lastModified',
+        align: 'left'
+    },
+    {
+        title: 'Date Created',
+        attributeDBName: 'dateCreated',
+        align: 'left'
+    }
+];
+
+
+
+const routesTableAttributes = [
+    {
+        title: 'Route Name',
+        attributeDBName: 'routeName',
         align: 'left'
     },
     {
@@ -45,28 +95,12 @@ const accountsTableAttributes = [
         align: 'left'
     },
     {
-        title: 'Taps',
-        attributeDBName: 'taps',
-        align: 'left'
-    },
-    {
-        title: 'Last Modified',
-        attributeDBName: 'lastModified',
+        title: 'Date Created',
+        attributeDBName: 'dateCreated',
         align: 'left'
     }
-]
-
-
-
-const marketsTableAttributes = [
-
 ];
 
-
-
-const routesTableAttributes = [
-
-];
 
 
 

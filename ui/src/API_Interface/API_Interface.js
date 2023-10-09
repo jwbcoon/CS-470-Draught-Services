@@ -33,6 +33,14 @@ export default class APIInterface {
                  }));
     }
 
+    async allMarkets() {
+        return axiosAgent.get(`markets/all-markets`);
+    }
+
+    async getMarketByMarketID(marketID) {
+        return axiosAgent.get(`markets/${marketID}`)
+    }
+
     async allRoutes() {
         return axiosAgent.get(`routes/all-routes`);
     }
@@ -41,6 +49,13 @@ export default class APIInterface {
         return axiosAgent.get(`routes/${routeID}`);
     }
 
+    async allAccounts() {
+        return axiosAgent.get(`accounts/all-accounts`);
+    }
+
+    async getAccountByAccountID(accountID) {
+        return axiosAgent.get(`accounts/${accountID}`)
+    }
     async getViewSelectionData(selectedItem) {
         return axiosAgent.get(`view-update/${selectedItem}`)
     }

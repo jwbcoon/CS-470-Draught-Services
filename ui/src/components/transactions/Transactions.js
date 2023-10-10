@@ -67,7 +67,8 @@ export default function TransactionTable(props) {
         </TableRow>
     }
 
-    return <Fragment>
+    return
+    <Fragment>
         {
             transactions.length > 0 &&
                 <TableContainer component={Paper}>

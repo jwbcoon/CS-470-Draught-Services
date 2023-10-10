@@ -17,7 +17,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import {presentationComponents, containerComponents}  from './MenuPresentationComponents';
-import SortSelect from './SortSelect';
+import LongMenu from './LongMenu';
 import Button from "@mui/material/Button";
 import API from '../API_Interface/API_Interface.js';
 
@@ -94,9 +94,10 @@ const TopBar = ({open, selectedItem, setViewColumns, viewColumns, handleDrawerOp
                             {user.unpack()}
                         </Typography>
                     </Box>
-                    {open
-                      ? <SortSelect selectedItem={selectedItem} setViewColumns={setViewColumns} viewColumns={viewColumns}/>
-                      : <Fragment/>}
+                    {
+                        open && viewColumns && !selectedItem.match(/[sS]ummary/) &&
+                        <LongMenu selectedItem={selectedItem} options={viewColumns}/>
+                    }
                     <Box width="100%" justifyContent="right" flex={1}>
                         <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
                             Logout
@@ -171,14 +172,26 @@ export default function MainDrawer({title, user, viewColumns, setViewColumns, lo
         setSelectedItem(title)
     };
 
+    useEffect(() => {
+        const api = new API();
+        console.log('Requesting viewSortSelection data from the API');
+
+        async function getViewSelection() {
+            const viewSelectionJSONData = await api.getViewSelectionData(selectedItem.toLowerCase());
+            console.log(`Data for viewSortSelection from the API_Interface ${JSON.stringify(viewSelectionJSONData)}`);
+            setViewColumns(viewSelectionJSONData.data);
+        }
+
+        if (!selectedItem.match(/[sS]ummary/)) getViewSelection();
+    }, [selectedItem]);
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <TopBar title={title} open={open} viewColumns={viewColumns}
                     handleDrawerOpen={handleDrawerOpen} user={user}
                     logoutAction={logoutAction}
-                    selectedItem={selectedItem}
-                    setViewColumns={setViewColumns}/>
+                    selectedItem={selectedItem}/>
             <Drawer
                 sx={{
                     width: drawerWidth,

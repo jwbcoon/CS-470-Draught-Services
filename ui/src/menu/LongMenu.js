@@ -1,6 +1,4 @@
-import {useState, useEffect, Fragment} from 'react';
-import {Grid, Box} from '@mui/material';
-import API from '../API_Interface/API_Interface.js';
+import {useState, Fragment} from 'react';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,7 +6,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const ITEM_HEIGHT = 48;
 
-const LongMenu = ({selectedItem, options}) => {
+export default function LongMenu({selectedItem, options}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -17,6 +15,8 @@ const LongMenu = ({selectedItem, options}) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  console.log(`In LongMenu: options is ${JSON.stringify(options)}`);
 
   return (
     <div>
@@ -49,7 +49,7 @@ const LongMenu = ({selectedItem, options}) => {
             const optKey = `${selectedItem.toLowerCase().replace(/s$/, 'ID')}`;
             return (
               <MenuItem key={option[optKey]} selected={option[optKey] === options[0][optKey]} onClick={handleClose}>
-                {option[optKey]}
+                  {selectedItem.slice(0,-1)} ID: {option[optKey]}
               </MenuItem>
             );
           })
@@ -58,27 +58,4 @@ const LongMenu = ({selectedItem, options}) => {
     </div>
   );
 };
-
-export default function SortSelect({viewColumns, setViewColumns, selectedItem}) {
-    console.log(`In SortSelect: selectedItem is ${selectedItem.toLowerCase()}`);
-
-    useEffect(() => {
-        const api = new API();
-        console.log('Requesting viewSortSelection data from the API');
-
-        async function getViewSelection() {
-            const viewSelJSONData = await api.getViewSelectionData(selectedItem.toLowerCase());
-            console.log(`Data for viewSortSelection from the API_Interface ${JSON.stringify(viewSelJSONData)}`);
-            setViewColumns(viewSelJSONData.data);
-        }
-
-        if (!selectedItem.match(  /[sS]ummary/)) getViewSelection();
-    }, [selectedItem, setViewColumns]);
-
-    console.log(`In SortSelect: viewColumns is ${JSON.stringify(viewColumns)}`);
-    if (!selectedItem.match(/[sS]ummary/) || viewColumns === undefined) return <Fragment/>
-    return (
-        <LongMenu selectedItem={selectedItem} options={viewColumns}/>
-    );
-}
 

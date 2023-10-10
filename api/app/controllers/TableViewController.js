@@ -9,7 +9,7 @@ function validSelection(ctx) {
 
 const getViewSelectionData = async ctx => {
     return new Promise((resolve, reject) => {
-        const query = pformat('select %I from %I LIMIT 30', validSelection(ctx).replace(/s$/, 'ID'), validSelection(ctx));
+        const query = pformat('select * from %I LIMIT 30', /*validSelection(ctx).replace(/s$/, 'ID'),*/ validSelection(ctx));
         dbConnection.query(query, (error, tuples) => {
             if (error) {
                 console.log("Connection error in TableViewController::getViewSelectionData", error);

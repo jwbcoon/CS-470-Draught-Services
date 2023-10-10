@@ -2,7 +2,6 @@ const Authorize = require('../app/middleware/Authorize.js');
 const VerifyJWT = require('../app/middleware/VerifyJWT.js');
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Default router
@@ -21,18 +20,22 @@ router.get('/', function (ctx) {
     return ctx.body = 'What is up?';
 });
 
+/*
+|--------------------------------------------------------------------------
+| login router
+|--------------------------------------------------------------------------
+|
+| Description
+|
+*/
 
-// Routes router configuration.
+// Login router configuration.
 
-
-const RoutesController = require('../app/controllers/RoutesController.js');
-const routesRouter = require('koa-router')({
-    prefix: '/routes'
+const LoginController = require('../app/controllers/LoginController.js');
+const loginRouter = require('koa-router')({
+    prefix: '/login'
 });
-
-routesRouter.use(VerifyJWT);
-routesRouter.get('/all-routes', Authorize('admin'), RoutesController.allRoutes, err => console.log(`allRoutes ran into an error: ${err}`));
-routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRouteID);
+loginRouter.get('/:user_id', LoginController.authorizeUser, (err) => console.log("draught_services_routes.js: login-route error:", err));
 
 
 /**
@@ -40,7 +43,7 @@ routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRou
  */
 router.use(
     '',
-    routesRouter.routes(),
+    loginRouter.routes(),
 );
 
 module.exports = function (app) {

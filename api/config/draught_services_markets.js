@@ -22,17 +22,14 @@ router.get('/', function (ctx) {
 });
 
 
-// Routes router configuration.
+const MarketsController = require('../app/controllers/MarketsController.js');
+const marketsRouter = require('koa-router') ({
+  prefix: '/markets'
+})
 
-
-const RoutesController = require('../app/controllers/RoutesController.js');
-const routesRouter = require('koa-router')({
-    prefix: '/routes'
-});
-
-routesRouter.use(VerifyJWT);
-routesRouter.get('/all-routes', Authorize('admin'), RoutesController.allRoutes, err => console.log(`allRoutes ran into an error: ${err}`));
-routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRouteID);
+marketsRouter.use(VerifyJWT);
+marketsRouter.get('/all-markets', Authorize('admin'), MarketsController.allMarkets, err => console.log(`draught_services_routes: ${err}`));
+marketsRouter.get('/:marketID', Authorize('admin'), MarketsController.getMarketByMarketID, err => console.log(`draught_services_routes: ${err}`));
 
 
 /**
@@ -40,7 +37,7 @@ routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRou
  */
 router.use(
     '',
-    routesRouter.routes(),
+    marketsRouter.routes()
 );
 
 module.exports = function (app) {

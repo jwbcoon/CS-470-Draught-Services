@@ -22,17 +22,14 @@ router.get('/', function (ctx) {
 });
 
 
-// Routes router configuration.
-
-
-const RoutesController = require('../app/controllers/RoutesController.js');
-const routesRouter = require('koa-router')({
-    prefix: '/routes'
+const TableViewController = require('../app/controllers/TableViewController.js');
+const tableViewRouter = require('koa-router') ({
+    prefix: '/view-update'
 });
 
-routesRouter.use(VerifyJWT);
-routesRouter.get('/all-routes', Authorize('admin'), RoutesController.allRoutes, err => console.log(`allRoutes ran into an error: ${err}`));
-routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRouteID);
+tableViewRouter.use(VerifyJWT);
+tableViewRouter.get('/:selected_item', Authorize('admin'), TableViewController.getViewSelectionData, err => console.log(`draught_services_routes.js: ${err}`));
+
 
 
 /**
@@ -40,7 +37,7 @@ routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRou
  */
 router.use(
     '',
-    routesRouter.routes(),
+    tableViewRouter.routes()
 );
 
 module.exports = function (app) {

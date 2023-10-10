@@ -22,17 +22,14 @@ router.get('/', function (ctx) {
 });
 
 
-// Routes router configuration.
+const AccountsController = require('../app/controllers/AccountsController.js');
+const accountsRouter = require('koa-router') ({
+  prefix: '/accounts'
+})
 
-
-const RoutesController = require('../app/controllers/RoutesController.js');
-const routesRouter = require('koa-router')({
-    prefix: '/routes'
-});
-
-routesRouter.use(VerifyJWT);
-routesRouter.get('/all-routes', Authorize('admin'), RoutesController.allRoutes, err => console.log(`allRoutes ran into an error: ${err}`));
-routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRouteID);
+accountsRouter.use(VerifyJWT);
+accountsRouter.get('/all-accounts', Authorize('admin'), AccountsController.allAccounts, err => console.log(`draught_services_routes: ${err}`));
+accountsRouter.get('/:accountID', Authorize('admin'), AccountsController.getAccountByAccountID, err => console.log(`draught_services_routes: ${err}`));
 
 
 /**
@@ -40,7 +37,7 @@ routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRou
  */
 router.use(
     '',
-    routesRouter.routes(),
+    accountsRouter.routes()
 );
 
 module.exports = function (app) {

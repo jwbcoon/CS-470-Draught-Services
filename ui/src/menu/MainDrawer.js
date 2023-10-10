@@ -1,6 +1,7 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
@@ -17,7 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import {presentationComponents, containerComponents}  from './MenuPresentationComponents';
-import LongMenu from './LongMenu';
+import MenuSet from './MenuSet';
 import Button from "@mui/material/Button";
 import API from '../API_Interface/API_Interface.js';
 
@@ -27,6 +28,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
+        marginTop: '60px',
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -68,10 +70,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-const TopBar = ({open, selectedItem, setViewColumns, viewColumns, handleDrawerOpen, title, user, logoutAction}) => {
+const TopBar = ({open, handleDrawerOpen, title, user, logoutAction}) => {
     // This component is responsible for rendering the Toolbar that is drawn
     // at the top of the drawer.
-    console.log(`In TopBar: selectedItem is ${selectedItem}`);
 
     return (
         <Fragment>
@@ -94,10 +95,6 @@ const TopBar = ({open, selectedItem, setViewColumns, viewColumns, handleDrawerOp
                             {user.unpack()}
                         </Typography>
                     </Box>
-                    {
-                        open && viewColumns && !selectedItem.match(/[sS]ummary/) &&
-                        <LongMenu selectedItem={selectedItem} options={viewColumns}/>
-                    }
                     <Box width="100%" justifyContent="right" flex={1}>
                         <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
                             Logout
@@ -153,10 +150,11 @@ const findSelectedComponent = (selectedItem) => {
     }
 };
 
-export default function MainDrawer({title, user, viewColumns, setViewColumns, logoutAction}) {
+export default function MainDrawer({title, user, logoutAction}) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [selectedItem, setSelectedItem] = useState('Summary');
+    const [viewColumns, setViewColumns] = useState(undefined);
 
     console.log('in MainDrawer');
 
@@ -218,10 +216,20 @@ export default function MainDrawer({title, user, viewColumns, setViewColumns, lo
                     />
                 </List>
             </Drawer>
-            <Main open={open}>
-                <DrawerHeader />
-                {findSelectedComponent(selectedItem).component}
-            </Main>
+            {
+                open && viewColumns && !selectedItem.match(/[sS]ummary/)
+                ?   <Main open={open}>
+                        <MenuSet selectedItem={selectedItem} options={viewColumns}/>
+                        <Stack divider={<Divider orientation='horizontal'/>}>
+                            <DrawerHeader />
+                            {findSelectedComponent(selectedItem).component}
+                        </Stack>
+                    </Main>
+                :   <Main open={open}>
+                        <DrawerHeader />
+                        {findSelectedComponent(selectedItem).component}
+                    </Main>
+            }
         </Box>
     );
 }

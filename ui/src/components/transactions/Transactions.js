@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-const transactionTable = tableType => {
+const transactionTableByType = tableType => {
     if (tableType === 'cycleCount')
         return [
          {
@@ -56,7 +56,7 @@ export default function TransactionTable(props) {
             sx={{'&:last-child td, &:last-child th': {border: 0}}}
         >
             {
-                transactionTable('cycleCount').map((attr, idx) =>
+                transactionTableByType('cycleCount').map((attr, idx) =>
                     <TableCell key={idx}
                                align={attr.align}>
                         {
@@ -76,7 +76,7 @@ export default function TransactionTable(props) {
                         <TableHead>
                             <TableRow>
                                 {
-                                    transactionTable('cycleCount').map((attr, idx) =>
+                                    transactionTableByType('cycleCount').map((attr, idx) =>
                                         <TableCell  key={idx}
                                                     align={attr.align}>
                                             {attr.title}

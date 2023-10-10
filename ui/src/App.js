@@ -7,14 +7,12 @@ import Typography from '@mui/material/Typography';
 import MainDrawer from './menu/MainDrawer';
 
 
-export default function App({user, viewColumns, setViewColumns, logoutAction}) {
+export default function App({user, logoutAction}) {
     const mainPageTitle = "Draught Services";
 
     return (
                 <MainDrawer title={mainPageTitle}
                             user={user}
-                            viewColumns={viewColumns}
-                            setViewColumns={setViewColumns}
                             logoutAction={logoutAction}/>
     )
 

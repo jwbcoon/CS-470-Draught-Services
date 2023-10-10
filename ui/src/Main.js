@@ -13,14 +13,12 @@ const logout = (setUser) => {
 export default function Main() {
 
     const [user, setUser] = useState(undefined);
-    const [viewColumns, setViewColumns] = useState(undefined);
 
     return (
         <Fragment>
             {
                 user !== undefined ? (
-                    <App user={user} viewColumns={viewColumns}
-                         setViewColumns={setViewColumns} logoutAction={logout(setUser)} />
+                    <App user={user} logoutAction={logout(setUser)} />
                 ) : (
                     <Login user={user} setUser={setUser} />
                 )

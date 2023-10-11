@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import Transactions from '../components/transactions/Transactions';
 
 function TabPanel(props) {
   const { children, target, index, ...other } = props;
-  const ChildTransactions = children.renderTransaction();
-  console.log(`In DropDown::TabPanel: children is ${JSON.stringify(children)}`);
 
   return (
     <div
@@ -18,9 +17,7 @@ function TabPanel(props) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {
-        target === index && <ChildTransactions/>
-      }
+      <Box/>
     </div>
   );
 }
@@ -38,13 +35,13 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({param}) {
-  const [target, setTarget] = React.useState(0);
+export default function VerticalTabs({target, setTarget, param}) {
+  console.log(`DropDown::target is: ${target}`);
+  console.log(`DropDown::param is: ${param}`);
 
   const handleChange = (event, newTarget) => {
     setTarget(newTarget);
   };
-  console.log(`In DropDown: param is ${param}`);
 
   return (
     <Box
@@ -62,18 +59,10 @@ export default function VerticalTabs({param}) {
         <Tab label="For All Routes" {...a11yProps(2)} />
         <Tab label="By Market" {...a11yProps(3)} />
       </Tabs>
-      <TabPanel value={target} index={0}>
-          {{ renderTransaction: () => React.createElement(Transactions, { requestIndex: 0, param: param }) }}
-      </TabPanel>
-      <TabPanel value={target} index={1}>
-          {{ renderTransaction: () => React.createElement(Transactions, { requestIndex: 1, param: param }) }}
-      </TabPanel>
-      <TabPanel value={target} index={2}>
-          {{ renderTransaction: () => React.createElement(Transactions, { requestIndex: 2, param: param }) }}
-      </TabPanel>
-      <TabPanel value={target} index={3}>
-          {{ renderTransaction: () => React.createElement(Transactions, { requestIndex: 3, param: param }) }}
-      </TabPanel>
+      <TabPanel value={target} index={0}/>
+      <TabPanel value={target} index={1}/>
+      <TabPanel value={target} index={2}/>
+      <TabPanel value={target} index={3}/>
     </Box>
   );
 }

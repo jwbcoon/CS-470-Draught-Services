@@ -30,7 +30,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
-        marginTop: '60px',
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -110,7 +109,8 @@ const TopBar = ({open, handleDrawerOpen, viewColumns, selectedItem, title, user,
     )
 };
 
-const PresentationListItems = ({menuItemTitles, selectedItem, dropOpen, onClick, onDropDownClick}) => {
+const PresentationListItems = ({menuItemTitles, selectedItem, target, setTarget,
+                                dropOpen, onClick, onDropDownClick}) => {
     return <div>
         {
             menuItemTitles.map(title => {
@@ -132,7 +132,7 @@ const PresentationListItems = ({menuItemTitles, selectedItem, dropOpen, onClick,
                             </ListItem>
                             {
                                 dropOpen && selectedItem.match(/[tT]ransactions/) &&
-                                <DropDown param={101768}/>
+                                <DropDown target={target} setTarget={setTarget} param={101768}/>
                             }
                         </>
                     );
@@ -150,26 +150,15 @@ const PresentationListItems = ({menuItemTitles, selectedItem, dropOpen, onClick,
     </div>;
 };
 
-const ContainerListItems = (props) => {
-    return  <div>
-        {
-            props.menuItemTitles.map(title =>
-                <ListItem button onClick={() => props.onClick(title)} key={title}>
-                    <ListItemText primary={title} key={title}/>
-                    {
-                        props.selectedItem === title && <ListItemIcon><ChevronRightIcon/></ListItemIcon>
-                    }
-                </ListItem>
-            )
-        }
-    </div>
-};
-
-const findSelectedComponent = (selectedItem) => {
+const findSelectedComponent = (selectedItem, dropOpen, dropDownTarget, params) => {
+    console.log(`findSelectedComponent::target is: ${dropDownTarget}`);
     const component = [...presentationComponents(),
-                        ...containerComponents()].filter(comp => comp.title === selectedItem);
-    if(component.length === 1)
+                       ...containerComponents({dropOpen: dropOpen, index: dropDownTarget, params: params})]
+                           .filter(comp => comp.title === selectedItem || (dropOpen && comp.title.match(/DropDown/)));
+    if (component.length === 1)
         return component[0];
+    if (component.length === 2)
+        return component[1];
 
     console.log("In findSelectedComponent of MakeEligible. Didn't find the component that corresponds to the menu item.")
     return {
@@ -180,12 +169,13 @@ const findSelectedComponent = (selectedItem) => {
 
 export default function MainDrawer({title, user, logoutAction}) {
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState('Summary');
     const [dropOpen, setDropOpen] = useState(false);
+    const [target, setTarget] = useState(0);
     const [viewColumns, setViewColumns] = useState(undefined);
 
-    console.log(`in MainDrawer; dropOpen is: ${dropOpen}`);
+    console.log(`in MainDrawer; target is: ${target}`);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -200,7 +190,6 @@ export default function MainDrawer({title, user, logoutAction}) {
     };
 
     const handleDropDownClick = () => {
-        console.log(`In dropdown clickhandler! DropOpen is: ${dropOpen}`);
         setDropOpen(!dropOpen);
     }
 
@@ -248,9 +237,10 @@ export default function MainDrawer({title, user, logoutAction}) {
                                            dropOpen={dropOpen}
                                            onClick={handleSelectedItem}
                                            onDropDownClick={handleDropDownClick}
+                                           target={target}
+                                           setTarget={setTarget}
                                            menuItemTitles={presentationComponents().map(comp => comp.title)}
                     />
-                    
                 </List>
             </Drawer>
             {
@@ -258,12 +248,20 @@ export default function MainDrawer({title, user, logoutAction}) {
                 ?   <Main open={open}>
                         <Stack divider={<Divider orientation='horizontal'/>}>
                             <DrawerHeader />
-                            {findSelectedComponent(selectedItem).component}
+                            {
+                                dropOpen
+                                ? findSelectedComponent(selectedItem, dropOpen, target, { cycleID: 300, accountID: 101768 }).component()
+                                : findSelectedComponent(selectedItem, dropOpen, target, { cycleID: 300, accountID: 101768 }).component
+                            }
                         </Stack>
                     </Main>
                 :   <Main open={open}>
                         <DrawerHeader />
-                        {findSelectedComponent(selectedItem).component}
+                        {
+                            dropOpen
+                            ? findSelectedComponent(selectedItem, dropOpen, target, { cycleID: 300, accountID: 101768 }).component()
+                            : findSelectedComponent(selectedItem, dropOpen, target, { cycleID: 300, accountID: 101768 }).component
+                        }
                     </Main>
             }
         </Box>

@@ -69,19 +69,19 @@ export default class APIInterface {
         return axiosAgent.get(`transactions/${cycleID}`);
     }
 
-    async getTransactionsPerCycleByAccountID(accountID) {
-        return axiosAgent.get(`transactions/${accountID}/one-account`);
+    async getTransactionsPerCycleByAccountID(cycleID, accountID) {
+        return axiosAgent.get(`transactions/${cycleID}/${accountID}/one-account`);
     }
 
-    async getTransactionsPerCycleByRouteID(routeID) {
-        return axiosAgent.get(`transactions/${routeID}/trans-for-route`);
+    async getTransactionsPerCycleByRouteID(cycleID, routeID) {
+        return axiosAgent.get(`transactions/${cycleID}/${routeID}/trans-for-route`);
     }
 
-    async getTransactionsPerCycleForAllRoutes() {
-        return axiosAgent.get(`transactions/all-routes`);
+    async getTransactionsPerCycleForAllRoutes(cycleID) {
+        return axiosAgent.get(`transactions/${cycleID}/all-routes`);
     }
 
-    async getTransactionsPerCycleByMarketID(marketID) {
-        return axiosAgent.get(`transactions/${marketID}/trans-for-market`);
+    async getTransactionsPerCycleByMarketID(cycleID, marketID) {
+        return axiosAgent.get(`transactions/${cycleID}/${marketID}/trans-for-market`);
     }
 }

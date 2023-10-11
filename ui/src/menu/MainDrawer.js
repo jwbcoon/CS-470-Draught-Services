@@ -30,7 +30,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
-        marginTop: '60px',
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -72,7 +71,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-const TopBar = ({open, handleDrawerOpen, title, user, logoutAction}) => {
+const TopBar = ({open, handleDrawerOpen, viewColumns, selectedItem, title, user, logoutAction}) => {
     // This component is responsible for rendering the Toolbar that is drawn
     // at the top of the drawer.
 
@@ -97,6 +96,7 @@ const TopBar = ({open, handleDrawerOpen, title, user, logoutAction}) => {
                             {user.unpack()}
                         </Typography>
                     </Box>
+                    {viewColumns && <MenuSet selectedItem={selectedItem} options={viewColumns}/>}
                     <Box width="100%" justifyContent="right" flex={1}>
                         <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
                             Logout
@@ -207,7 +207,7 @@ export default function MainDrawer({title, user, logoutAction}) {
             setViewColumns(viewSelectionJSONData.data);
         }
 
-        if (!selectedItem.match(/[sS]ummary/)) getViewSelection();
+        getViewSelection();
     }, [selectedItem]);
 
     return (
@@ -252,7 +252,6 @@ export default function MainDrawer({title, user, logoutAction}) {
             {
                 open && viewColumns && !selectedItem.match(/[sS]ummary/)
                 ?   <Main open={open}>
-                        <MenuSet selectedItem={selectedItem} options={viewColumns}/>
                         <Stack divider={<Divider orientation='horizontal'/>}>
                             <DrawerHeader />
                             {findSelectedComponent(selectedItem).component}

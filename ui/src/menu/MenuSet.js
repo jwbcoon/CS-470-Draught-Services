@@ -52,9 +52,9 @@ export default function MenuSet({selectedItem, options}) {
                     }}
                   >
                     {
-                        options.map(option => {
+                        options.map((option, idx) => {
                             return (
-                              <MenuItem key={option[selectField]} selected={option[selectField] === options[0][selectField]} onClick={handleClose}>
+                              <MenuItem key={`${selectField}${idx}`} selected={option[selectField] === options[0][selectField]} onClick={handleClose}>
                                   {option[selectField]}
                               </MenuItem>
                             );

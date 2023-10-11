@@ -6,6 +6,30 @@ function now() {
     return dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
 }
 
+const getTransactions = async ctx => {
+    console.log('Querying getTransaction');
+    return new Promise((resolve, reject) => {
+        const query = pformat(`
+                        select * from %I limit %L
+                        `, 'transactions', ctx.params.limit);
+        dbConnection.query(query, (error, tuples) => {
+            if (error) {
+                console.log("Connection error in TransactionsController::getTransacations", error);
+                return reject(error);
+            }
+            ctx.body = tuples['rows'];
+            ctx.status = 200;
+            return resolve();
+        });
+    }).catch(err => {
+        console.log("Database connection error in getTransactions.", err);
+        // The UI side will have to look for the value of status and
+        // if it is not 200, act appropriately.
+        ctx.body = [];
+        ctx.status = 500;
+    });
+}
+
 const getTransactionCountPerCycle = async ctx => {
     console.log('Querying getTransactionCountPerCycle');
     return new Promise((resolve, reject) => {
@@ -154,6 +178,7 @@ const getTransactionsPerCycleByMarketID = async ctx => {
 
 
 module.exports = {
+    getTransactions,
     getTransactionCountPerCycle,
     getTransactionsPerCycleByAccountID,
     getTransactionsPerCycleByRouteID,

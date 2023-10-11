@@ -12,51 +12,50 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-const transactionTableByType = tableType => {
-    if (tableType === 'cycleCount')
-        return [
-         {
-            title: 'Cycle ID',
-            attributeDBName: 'cycleID',
-            align: 'left'
-        },
-        {
-            title: 'Total Transactions',
-            attributeDBName: 'tot_transactions',
-            align: 'left'
-        }
-    ];
-    else
-        return transactionsTableAttributes;
+function determineRequest(api, requestIndex) {
+    switch (requestIndex) {
+      case 0:
+          return api.getTransactionsPerCycleByAccountID;
+      case 1:
+          return api.getTransactionsPerCycleByRouteID;
+      case 2:
+          return api.getTransactionsPerCycleForAllRoutes;
+      case 3:
+          return api.getTransactionsPerCycleByMarketID;
+
+      default:
+        return api.getTransactions;
+    }
 }
 
 
-export default function TransactionTable(props) {
+export default function TransactionTable({requestIndex, param}) {
 
 
     const [transactions, setTransactions] = useState([]);
+    const limit = 50;
     console.log(`in TransactionTable contains ${JSON.stringify(transactions)}`);
-    const cycleID = 300;
+    console.log(`requestIndex is: ${requestIndex} and param is ${param}`);
 
 
     useEffect(() => {
         const api = new API();
 
-        async function getTransactions() {
-            const transactionsJSONString = await api.getTransactionCountPerCycle(cycleID);
+        async function getTransactions(request) {
+            const transactionsJSONString = await request(param); 
             console.log(`transactions from the DB ${JSON.stringify(transactionsJSONString)}`);
             setTransactions(transactionsJSONString.data);
         }
 
-        getTransactions();
-    }, [cycleID]);
+        getTransactions(determineRequest(api, requestIndex));
+    }, [param, requestIndex]);
 
     const TRow = ({transactionObject}) => {
         return <TableRow
             sx={{'&:last-child td, &:last-child th': {border: 0}}}
         >
             {
-                transactionTableByType('cycleCount').map((attr, idx) =>
+                transactionsTableAttributes.map((attr, idx) =>
                     <TableCell key={idx}
                                align={attr.align}>
                         {
@@ -67,32 +66,33 @@ export default function TransactionTable(props) {
         </TableRow>
     }
 
-    return
-    <Fragment>
-        {
-            transactions.length > 0 &&
-                <TableContainer component={Paper}>
-                    <Table sx={{minWidth: 650}} aria-label="transaction table">
-                        <TableHead>
-                            <TableRow>
+    return (
+        <Fragment>
+            {
+                transactions.length > 0 &&
+                    <TableContainer component={Paper}>
+                        <Table sx={{minWidth: 650}} aria-label="transaction table">
+                            <TableHead>
+                                <TableRow>
+                                    {
+                                        transactionsTableAttributes.map((attr, idx) =>
+                                            <TableCell  key={idx}
+                                                        align={attr.align}>
+                                                {attr.title}
+                                            </TableCell>)
+                                    }
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
                                 {
-                                    transactionTableByType('cycleCount').map((attr, idx) =>
-                                        <TableCell  key={idx}
-                                                    align={attr.align}>
-                                            {attr.title}
-                                        </TableCell>)
+                                    transactions.map((transaction, idx) => (
+                                        <TRow transactionObject={transaction} key={idx}/>
+                                    ))
                                 }
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                transactions.map((transaction, idx) => (
-                                    <TRow transactionObject={transaction} key={idx}/>
-                                ))
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-        }
-    </Fragment>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+            }
+        </Fragment>
+    )
 }

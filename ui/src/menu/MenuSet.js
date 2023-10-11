@@ -14,6 +14,7 @@ export default function MenuSet({selectedItem, options}) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const dbPacketKeys = Object.keys(options[0]);
 
   console.log(`In MenuSet: options is ${JSON.stringify(options)}`);
@@ -21,7 +22,7 @@ export default function MenuSet({selectedItem, options}) {
   return (
     <Stack direction='row' spacing={1} justifyContent='flex-end' >
       {
-          dbPacketKeys.map((selectField, idx) => 
+          dbPacketKeys.map((selectField, idx) => (
               <>
                   <Button variant='contained'
                     key={idx}
@@ -51,16 +52,17 @@ export default function MenuSet({selectedItem, options}) {
                     }}
                   >
                     {
-                        dbPacketKeys.map(key => options.map(option => {
+                        options.map(option => {
                             return (
-                              <MenuItem key={option[key]} selected={option[key] === options[0][key]} onClick={handleClose}>
-                                  {option[key]}
+                              <MenuItem key={option[selectField]} selected={option[selectField] === options[0][selectField]} onClick={handleClose}>
+                                  {option[selectField]}
                               </MenuItem>
                             );
-                        }))
+                        })
                     }
                   </Menu>
               </>
+              )
           )
       }
     </Stack>

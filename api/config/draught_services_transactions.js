@@ -28,13 +28,14 @@ const transRouter = require('koa-router') ({
 });
 
 transRouter.use(VerifyJWT);
-transRouter.get('/:cycleID', Authorize('admin'), TransactionsController.getTransactionCountPerCycle, (err) => console.log(`draught_services_routes.js: ${err}`)); 
+transRouter.get('/:limit/all-transactions', Authorize('admin'), TransactionsController.getTransactions, err => console.log(`draught_services_transactions.js: ${err}`))
+transRouter.get('/:cycleID', Authorize('admin'), TransactionsController.getTransactionCountPerCycle, err => console.log(`draught_services_transactions.js: ${err}`)); 
 transRouter.get('/:cycleID/:accountID/one-account', Authorize('admin'), 
-    TransactionsController.getTransactionsPerCycleByAccountID, (err) => console.log(`draught_services_routes.js: ${err}`)); 
+    TransactionsController.getTransactionsPerCycleByAccountID, err => console.log(`draught_services_transactions.js: ${err}`)); 
 transRouter.get('/:cycleID/:routeID/trans-for-route', Authorize('admin'), 
-    TransactionsController.getTransactionsPerCycleByRouteID, (err) => console.log(`draught_services_routes.js: ${err}`)); 
-transRouter.get('/:cycleID/all-routes', Authorize('admin'), TransactionsController.getTransactionsPerCycleForAllRoutes, (err) => console.log(`draught_services_routes.js: ${err}`)); 
-transRouter.get('/:cycleID/:marketID/trans-for-market', Authorize('admin'), TransactionsController.getTransactionsPerCycleByMarketID, (err) => console.log(`draught_services_routes.js: ${err}`)); 
+    TransactionsController.getTransactionsPerCycleByRouteID, err => console.log(`draught_services_transactions.js: ${err}`)); 
+transRouter.get('/:cycleID/all-routes', Authorize('admin'), TransactionsController.getTransactionsPerCycleForAllRoutes, err => console.log(`draught_services_transactions.js: ${err}`)); 
+transRouter.get('/:cycleID/:marketID/trans-for-market', Authorize('admin'), TransactionsController.getTransactionsPerCycleByMarketID, err => console.log(`draught_services_transactions.js: ${err}`)); 
 
 
 /**

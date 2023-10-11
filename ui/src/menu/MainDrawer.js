@@ -13,12 +13,14 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 import {presentationComponents, containerComponents}  from './MenuPresentationComponents';
 import MenuSet from './MenuSet';
+import DropDown from './DropDown';
 import Button from "@mui/material/Button";
 import API from '../API_Interface/API_Interface.js';
 
@@ -107,17 +109,36 @@ const TopBar = ({open, handleDrawerOpen, title, user, logoutAction}) => {
     )
 };
 
-const PresentationListItems = (props) => {
+const PresentationListItems = ({menuItemTitles, selectedItem, dropOpen, onClick, onDropDownClick}) => {
     return <div>
         {
-            props.menuItemTitles.map(title =>
-                <ListItem button onClick={() => props.onClick(title)} key={title}>
-                    <ListItemText primary={title} key={title}/>
-                    {
-                        props.selectedItem === title && <ListItemIcon><ChevronRightIcon/></ListItemIcon>
-                    }
-                </ListItem>
-            )
+            menuItemTitles.map(title => {
+                if (title === 'Transactions')
+                    return (
+                        <ListItem button onClick={() => onClick(title)} key={title}>
+                            <ListItemText primary={title} key={title}/>
+                            {
+                                selectedItem === title &&
+                                <ListItemIcon>
+                                    {
+                                        dropOpen
+                                        ? <ExpandMore onClick={() => onDropDownClick()}/>
+                                        : <ChevronRightIcon onClick={() => onDropDownClick()}/>
+                                    }
+                                </ListItemIcon>
+                            }
+                        </ListItem>
+                    );
+                else
+                    return (
+                        <ListItem button onClick={() => onClick(title)} key={title}>
+                            <ListItemText primary={title} key={title}/>
+                            {
+                                selectedItem === title && <ListItemIcon><ChevronRightIcon/></ListItemIcon>
+                            }
+                        </ListItem>
+                    );
+            })
         }
     </div>;
 };
@@ -154,9 +175,10 @@ export default function MainDrawer({title, user, logoutAction}) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [selectedItem, setSelectedItem] = useState('Summary');
+    const [dropOpen, setDropOpen] = useState(false);
     const [viewColumns, setViewColumns] = useState(undefined);
 
-    console.log('in MainDrawer');
+    console.log(`in MainDrawer; dropOpen is: ${dropOpen}`);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -167,8 +189,13 @@ export default function MainDrawer({title, user, logoutAction}) {
     };
 
     const handleSelectedItem = (title) => {
-        setSelectedItem(title)
+        setSelectedItem(title);
     };
+
+    const handleDropDownClick = () => {
+        console.log(`In dropdown clickhandler! DropOpen is: ${dropOpen}`);
+        setDropOpen(!dropOpen);
+    }
 
     useEffect(() => {
         const api = new API();
@@ -211,9 +238,15 @@ export default function MainDrawer({title, user, logoutAction}) {
                 <Divider />
                 <List>
                     <PresentationListItems selectedItem={selectedItem}
+                                           dropOpen={dropOpen}
                                            onClick={handleSelectedItem}
+                                           onDropDownClick={handleDropDownClick}
                                            menuItemTitles={presentationComponents().map(comp => comp.title)}
                     />
+                    {
+                        dropOpen && selectedItem.match(/[tT]ransactions/) &&
+                        <DropDown param={101768}/>
+                    }
                 </List>
             </Drawer>
             {

@@ -56,12 +56,32 @@ export default class APIInterface {
     async getAccountByAccountID(accountID) {
         return axiosAgent.get(`accounts/${accountID}`)
     }
+
     async getViewSelectionData(selectedItem) {
         return axiosAgent.get(`view-update/${selectedItem}`)
+    }
+
+    async getTransactions(limit) {
+        return axiosAgent.get(`transactions/${limit}/all-transactions`)
     }
 
     async getTransactionCountPerCycle(cycleID) {
         return axiosAgent.get(`transactions/${cycleID}`);
     }
 
+    async getTransactionsPerCycleByAccountID(accountID) {
+        return axiosAgent.get(`transactions/${accountID}/one-account`);
+    }
+
+    async getTransactionsPerCycleByRouteID(routeID) {
+        return axiosAgent.get(`transactions/${routeID}/trans-for-route`);
+    }
+
+    async getTransactionsPerCycleForAllRoutes() {
+        return axiosAgent.get(`transactions/all-routes`);
+    }
+
+    async getTransactionsPerCycleByMarketID(marketID) {
+        return axiosAgent.get(`transactions/${marketID}/trans-for-market`);
+    }
 }

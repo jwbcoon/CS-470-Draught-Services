@@ -42,7 +42,7 @@ export default function TransactionTable({requestIndex, param}) {
         const api = new API();
 
         async function getTransactions(request) {
-            const transactionsJSONString = await request(param); 
+            const transactionsJSONString = await request(requestIndex >= 0 && requestIndex < 4 ? param : limit); 
             console.log(`transactions from the DB ${JSON.stringify(transactionsJSONString)}`);
             setTransactions(transactionsJSONString.data);
         }

@@ -15,9 +15,10 @@ const getViewSelectionData = async ctx => {
             query = pformat('select %I from %I', 'cycleID', 'cycles');
         }
         else {
-            query = pformat('select a.%I, b.%I from %I a, %I b',
+            query = pformat('select a.%I, b.%I from %I a, %I b group by b.%I, a.%I order by b.%I',
                     validSelection(ctx).replace(/s$/, 'ID'),
-                    'cycleID', validSelection(ctx), 'cycles');
+                    'cycleID', validSelection(ctx), 'cycles',
+                    'cycleID', validSelection(ctx).replace(/s$/, 'ID'), 'cycleID');
         }   
             dbConnection.query(query, (error, tuples) => {
             if (error) {

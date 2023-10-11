@@ -1,7 +1,7 @@
 import {useState, Fragment} from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import {Stack, Divider, Button} from '@mui/material';
+import {Stack, Button} from '@mui/material';
 
 const ITEM_HEIGHT = 48;
 

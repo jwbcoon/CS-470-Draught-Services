@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -7,6 +7,8 @@ import Transactions from '../components/transactions/Transactions';
 
 function TabPanel(props) {
   const { children, target, index, ...other } = props;
+  const ChildTransactions = children.renderTransaction();
+  console.log(`In DropDown::TabPanel: children is ${JSON.stringify(children)}`);
 
   return (
     <div
@@ -16,11 +18,9 @@ function TabPanel(props) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {target === index && (
-        <Box>
-            {children}
-        </Box>
-      )}
+      {
+        target === index && <ChildTransactions/>
+      }
     </div>
   );
 }
@@ -63,16 +63,16 @@ export default function VerticalTabs({param}) {
         <Tab label="By Market" {...a11yProps(3)} />
       </Tabs>
       <TabPanel value={target} index={0}>
-          <Transactions requestIndex={0} param={param}/>
+          {{ renderTransaction: () => React.createElement(Transactions, { requestIndex: 0, param: param }) }}
       </TabPanel>
       <TabPanel value={target} index={1}>
-          <Transactions requestIndex={1} param={param}/>
+          {{ renderTransaction: () => React.createElement(Transactions, { requestIndex: 1, param: param }) }}
       </TabPanel>
       <TabPanel value={target} index={2}>
-          <Transactions requestIndex={2} param={param}/>
+          {{ renderTransaction: () => React.createElement(Transactions, { requestIndex: 2, param: param }) }}
       </TabPanel>
       <TabPanel value={target} index={3}>
-          <Transactions requestIndex={3} param={param}/>
+          {{ renderTransaction: () => React.createElement(Transactions, { requestIndex: 3, param: param }) }}
       </TabPanel>
     </Box>
   );

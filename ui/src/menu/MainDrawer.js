@@ -30,6 +30,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
+        marginTop: '60px',
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -115,19 +116,25 @@ const PresentationListItems = ({menuItemTitles, selectedItem, dropOpen, onClick,
             menuItemTitles.map(title => {
                 if (title === 'Transactions')
                     return (
-                        <ListItem button onClick={() => onClick(title)} key={title}>
-                            <ListItemText primary={title} key={title}/>
+                        <>
+                            <ListItem button onClick={() => onClick(title)} key={title}>
+                                <ListItemText primary={title} key={title}/>
+                                {
+                                    selectedItem === title &&
+                                    <ListItemIcon>
+                                        {
+                                            dropOpen
+                                            ? <ExpandMore onClick={() => onDropDownClick()}/>
+                                            : <ChevronRightIcon onClick={() => onDropDownClick()}/>
+                                        }
+                                    </ListItemIcon>
+                                }
+                            </ListItem>
                             {
-                                selectedItem === title &&
-                                <ListItemIcon>
-                                    {
-                                        dropOpen
-                                        ? <ExpandMore onClick={() => onDropDownClick()}/>
-                                        : <ChevronRightIcon onClick={() => onDropDownClick()}/>
-                                    }
-                                </ListItemIcon>
+                                dropOpen && selectedItem.match(/[tT]ransactions/) &&
+                                <DropDown param={101768}/>
                             }
-                        </ListItem>
+                        </>
                     );
                 else
                     return (
@@ -243,10 +250,7 @@ export default function MainDrawer({title, user, logoutAction}) {
                                            onDropDownClick={handleDropDownClick}
                                            menuItemTitles={presentationComponents().map(comp => comp.title)}
                     />
-                    {
-                        dropOpen && selectedItem.match(/[tT]ransactions/) &&
-                        <DropDown param={101768}/>
-                    }
+                    
                 </List>
             </Drawer>
             {

@@ -11,7 +11,7 @@ function validSelection(ctx) {
 const getViewSelectionData = async ctx => {
     return new Promise((resolve, reject) => {
         let query = '';
-        if (validSelection(ctx).match(/cycles/)) {
+        if (validSelection(ctx).match(/(cycles)|(transactions)/)) {
             query = pformat('select %I from %I', 'cycleID', 'cycles');
         }
         else {

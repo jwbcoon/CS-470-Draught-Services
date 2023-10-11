@@ -25,7 +25,7 @@ export default function MenuSet({selectedItem, options}) {
           dbPacketKeys.map((selectField, idx) => (
               <>
                   <Button variant='contained'
-                    key={idx}
+                    key={`long-button${idx}`}
                     aria-label="more"
                     id={`long-button${idx}`}
                     aria-controls={open ? 'long-menu' : undefined}
@@ -36,7 +36,7 @@ export default function MenuSet({selectedItem, options}) {
                       {selectField.replace(/([A-Z][a-zD])/g, ' $1')}
                   </Button>
                   <Menu
-                    key={idx}
+                    key={`long-menu${idx}`}
                     id={`long-menu${idx}`}
                     MenuListProps={{
                       'aria-labelledby': `long-button${idx}`,

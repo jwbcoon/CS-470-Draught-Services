@@ -21,7 +21,6 @@ import ListItemText from '@mui/material/ListItemText';
 import {presentationComponents, containerComponents}  from './MenuPresentationComponents';
 import MenuSet from './MenuSet';
 import DropDown from './DropDown';
-import Button from "@mui/material/Button";
 import API from '../API_Interface/API_Interface.js';
 
 const drawerWidth = 240;
@@ -71,7 +70,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-const TopBar = ({open, handleDrawerOpen, viewColumns, selectedItem, title, user, logoutAction}) => {
+const TopBar = ({open, handleDrawerOpen, setAnchorIDs, viewColumns,
+                 selectedItem, title, user, logoutAction}) => {
     // This component is responsible for rendering the Toolbar that is drawn
     // at the top of the drawer.
 
@@ -96,7 +96,10 @@ const TopBar = ({open, handleDrawerOpen, viewColumns, selectedItem, title, user,
                             {user.unpack()}
                         </Typography>
                     </Box>
-                    {viewColumns && <MenuSet selectedItem={selectedItem} options={viewColumns}/>}
+                    {
+                        viewColumns &&
+                        <MenuSet setAnchorIDs={setAnchorIDs} selectedItem={selectedItem} options={viewColumns}/>
+                    }
                     <Box width="100%" justifyContent="right" flex={1}>
                         <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
                             Logout
@@ -132,7 +135,7 @@ const PresentationListItems = ({menuItemTitles, selectedItem, target, setTarget,
                             </ListItem>
                             {
                                 dropOpen && selectedItem.match(/[tT]ransactions/) &&
-                                <DropDown target={target} setTarget={setTarget} param={101768}/>
+                                <DropDown target={target} setTarget={setTarget}/>
                             }
                         </>
                     );
@@ -170,12 +173,13 @@ const findSelectedComponent = (selectedItem, dropOpen, dropDownTarget, params) =
 export default function MainDrawer({title, user, logoutAction}) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState('Summary');
     const [dropOpen, setDropOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState('Summary');
     const [target, setTarget] = useState(0);
     const [viewColumns, setViewColumns] = useState(undefined);
+    const [anchorIDs, setAnchorIDs] = useState(undefined);
 
-    console.log(`in MainDrawer; target is: ${target}`);
+    console.log(`in MainDrawer;\ntarget is: ${target}\nanchorIDs is: ${JSON.stringify(anchorIDs)}`);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -193,24 +197,42 @@ export default function MainDrawer({title, user, logoutAction}) {
         setDropOpen(!dropOpen);
     }
 
+    function determineRequest(api, requestIndex) {
+        switch (requestIndex) {
+          case 0:
+              return api.getTransactionsPerCycleByAccountID;
+          case 1:
+              return api.getTransactionsPerCycleByRouteID;
+          case 2:
+              return api.getTransactionsPerCycleForAllRoutes;
+          case 3:
+              return api.getTransactionsPerCycleByMarketID;
+
+          default:
+            return api.getViewSelectionMaxes;
+        }
+    }
+
     useEffect(() => {
         const api = new API();
         console.log('Requesting viewSortSelection data from the API');
 
-        async function getViewSelection() {
-            const viewSelectionJSONData = await api.getViewSelectionData(selectedItem.toLowerCase());
+        async function getViewSelection(request) {
+            const viewSelectionJSONData = await (dropOpen ? request(anchorIDs) : api.getViewSelectionData());
             console.log(`Data for viewSortSelection from the API_Interface ${JSON.stringify(viewSelectionJSONData)}`);
             setViewColumns(viewSelectionJSONData.data);
+            if (!anchorIDs) setAnchorIDs(viewSelectionJSONData.data['0']);
         }
 
-        getViewSelection();
-    }, [selectedItem]);
+        getViewSelection(determineRequest(api, target));
+    }, [dropOpen, target]);
 
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <TopBar title={title} open={open} viewColumns={viewColumns}
                     handleDrawerOpen={handleDrawerOpen} user={user}
+                    setAnchorIDs={setAnchorIDs}
                     logoutAction={logoutAction}
                     selectedItem={selectedItem}/>
             <Drawer
@@ -239,7 +261,7 @@ export default function MainDrawer({title, user, logoutAction}) {
                                            onDropDownClick={handleDropDownClick}
                                            target={target}
                                            setTarget={setTarget}
-                                           menuItemTitles={presentationComponents().map(comp => comp.title)}
+                                          menuItemTitles={presentationComponents().map(comp => comp.title)}
                     />
                 </List>
             </Drawer>
@@ -248,20 +270,12 @@ export default function MainDrawer({title, user, logoutAction}) {
                 ?   <Main open={open}>
                         <Stack divider={<Divider orientation='horizontal'/>}>
                             <DrawerHeader />
-                            {
-                                dropOpen
-                                ? findSelectedComponent(selectedItem, dropOpen, target, { cycleID: 300, accountID: 101768 }).component()
-                                : findSelectedComponent(selectedItem, dropOpen, target, { cycleID: 300, accountID: 101768 }).component
-                            }
+                            {findSelectedComponent(selectedItem, dropOpen, target, anchorIDs).component}
                         </Stack>
                     </Main>
                 :   <Main open={open}>
                         <DrawerHeader />
-                        {
-                            dropOpen
-                            ? findSelectedComponent(selectedItem, dropOpen, target, { cycleID: 300, accountID: 101768 }).component()
-                            : findSelectedComponent(selectedItem, dropOpen, target, { cycleID: 300, accountID: 101768 }).component
-                        }
+                        {findSelectedComponent(selectedItem, dropOpen, target, anchorIDs).component}
                     </Main>
             }
         </Box>

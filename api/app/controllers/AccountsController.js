@@ -10,8 +10,8 @@ const allAccounts = async (ctx) => {
                        SELECT *
                         FROM 
                             accounts
-                        ORDER BY %I
-                        `, 'accountName');
+                        ORDER BY %I LIMIT %L
+                        `, 'accountName', 10000);
         dbConnection.query(query, (error, tuples) => {
             if (error) {
                 console.log("Connection error in AccountsController::allAccounts", error);

@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Transactions from '../components/transactions/Transactions';
 
 function TabPanel(props) {
   const { children, target, index, ...other } = props;
@@ -35,9 +33,8 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({target, setTarget, param}) {
+export default function VerticalTabs({target, setTarget}) {
   console.log(`DropDown::target is: ${target}`);
-  console.log(`DropDown::param is: ${param}`);
 
   const handleChange = (event, newTarget) => {
     setTarget(newTarget);

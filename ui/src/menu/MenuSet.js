@@ -5,17 +5,36 @@ import {Stack, Button} from '@mui/material';
 
 const ITEM_HEIGHT = 48;
 
-export default function MenuSet({selectedItem, options}) {
+export default function MenuSet({setAnchorIDs, selectedItem, options}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const dbPacketKeys = Object.keys(options[0]);
+  let newAnchorIDs = { cycleID: options[0]['cycleID'] };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (selection, idx) => {
+    switch (selection) {
+      case 'cycleID':
+        newAnchorIDs = {...options[idx], cycleID: options[idx][selection]};
+        break;
+      case 'accountID':
+        newAnchorIDs = {...options[idx], accountID: options[idx][selection]};
+        break;
+      case 'marketID':
+        newAnchorIDs = {...options[idx], marketID: options[idx][selection]};
+        break;
+      case 'routeID':
+        newAnchorIDs = {...options[idx], routeID: options[idx][selection]};
+        break;
+
+      default:
+        break;
+    }
+    setAnchorIDs(newAnchorIDs);
     setAnchorEl(null);
   };
-
-  const dbPacketKeys = Object.keys(options[0]);
 
   console.log(`In MenuSet: options is ${JSON.stringify(options)}`);
 
@@ -52,10 +71,11 @@ export default function MenuSet({selectedItem, options}) {
                     }}
                   >
                     {
-                        options.map((option, idx) => {
+                        options.map((option, optIdx) => {
                             return (
-                              <MenuItem key={`${selectField}${idx}`} selected={option[selectField] === options[0][selectField]} onClick={handleClose}>
-                                  {option[selectField]}
+                              <MenuItem key={`${selectField}:${optIdx}`} selected={optIdx === 0}
+                                        onClick={() => handleClose(selectField, optIdx)}>
+                                  {options[optIdx][selectField]}
                               </MenuItem>
                             );
                         })

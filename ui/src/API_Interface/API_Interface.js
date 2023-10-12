@@ -38,7 +38,7 @@ export default class APIInterface {
     }
 
     async getMarketByMarketID(marketID) {
-        return axiosAgent.get(`markets/${marketID}`)
+        return axiosAgent.get(`markets/${marketID}`);
     }
 
     async allRoutes() {
@@ -54,34 +54,38 @@ export default class APIInterface {
     }
 
     async getAccountByAccountID(accountID) {
-        return axiosAgent.get(`accounts/${accountID}`)
+        return axiosAgent.get(`accounts/${accountID}`);
     }
 
-    async getViewSelectionData(selectedItem) {
-        return axiosAgent.get(`view-update/${selectedItem}`)
+    async getViewSelectionData() {
+        return axiosAgent.get(`view-update/selections`);
+    }
+
+    async getViewSelectionMaxes() {
+        return axiosAgent.get(`view-update/maxes`);
     }
 
     async getTransactions(limit) {
-        return axiosAgent.get(`transactions/${limit}/all-transactions`)
+        return axiosAgent.get(`transactions/${limit}/all-transactions`);
     }
 
-    async getTransactionCountPerCycle(cycleID) {
+    async getTransactionCountPerCycle({cycleID}) {
         return axiosAgent.get(`transactions/${cycleID}`);
     }
 
-    async getTransactionsPerCycleByAccountID(cycleID, accountID) {
+    async getTransactionsPerCycleByAccountID({cycleID, accountID}) {
         return axiosAgent.get(`transactions/${cycleID}/${accountID}/one-account`);
     }
 
-    async getTransactionsPerCycleByRouteID(cycleID, routeID) {
+    async getTransactionsPerCycleByRouteID({cycleID, routeID}) {
         return axiosAgent.get(`transactions/${cycleID}/${routeID}/trans-for-route`);
     }
 
-    async getTransactionsPerCycleForAllRoutes(cycleID) {
+    async getTransactionsPerCycleForAllRoutes({cycleID}) {
         return axiosAgent.get(`transactions/${cycleID}/all-routes`);
     }
 
-    async getTransactionsPerCycleByMarketID(cycleID, marketID) {
+    async getTransactionsPerCycleByMarketID({cycleID, marketID}) {
         return axiosAgent.get(`transactions/${cycleID}/${marketID}/trans-for-market`);
     }
 }

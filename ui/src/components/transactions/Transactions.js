@@ -35,14 +35,14 @@ export default function TransactionTable({dropOpen, requestIndex, params}) {
     const [transactions, setTransactions] = useState([]);
     const limit = 50;
     console.log(`in TransactionTable contains ${JSON.stringify(transactions)}`);
-    console.log(`TransactionTable::requestIndex is: ${requestIndex} and TransactionTable::params is ${JSON.stringify(...(requestIndex ? params : [limit]))}`);
+    console.log(`TransactionTable::requestIndex is: ${requestIndex} and TransactionTable::params is ${JSON.stringify(params ? params : limit)}`);
 
 
     useEffect(() => {
         const api = new API();
 
         async function getTransactions(request) {
-            const transactionsJSONString = await request(...(dropOpen ? Object.values(params) : [limit])); 
+            const transactionsJSONString = await request(dropOpen ? params : limit); 
             console.log(`transactions from the DB ${JSON.stringify(transactionsJSONString)}`);
             setTransactions(transactionsJSONString.data);
         }

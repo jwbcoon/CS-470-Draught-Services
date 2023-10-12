@@ -28,7 +28,8 @@ const tableViewRouter = require('koa-router') ({
 });
 
 tableViewRouter.use(VerifyJWT);
-tableViewRouter.get('/:selected_item', Authorize('admin'), TableViewController.getViewSelectionData, err => console.log(`draught_services_routes.js: ${err}`));
+tableViewRouter.get('/selections', Authorize('admin'), TableViewController.getViewSelectionData, err => console.log(`draught_services_table_view.js: ${err}`));
+tableViewRouter.get('/maxes', Authorize('admin'), TableViewController.getViewSelectionMaxes, err => console.log(`draught_services_table_view.js: ${err}`));
 
 
 

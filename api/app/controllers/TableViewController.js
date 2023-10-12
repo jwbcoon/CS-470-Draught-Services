@@ -1,25 +1,14 @@
 const dbConnection = require('../../database/connection');
 const pformat = require('pg-format');
 
-function validSelection(ctx) {
-    if (ctx.params.selected_item.match(/(accounts)|(markets)|(routes)|(transactions)/))
-        return ctx.params.selected_item;
-    else return 'cycles'
-}
-
 
 const getViewSelectionData = async ctx => {
     return new Promise((resolve, reject) => {
-        let query = '';
-        if (validSelection(ctx).match(/(cycles)|(transactions)/)) {
-            query = pformat('select %I from %I', 'cycleID', 'cycles');
-        }
-        else {
-            query = pformat('select a.%I, b.%I from %I a, %I b group by b.%I, a.%I order by b.%I',
-                    validSelection(ctx).replace(/s$/, 'ID'),
-                    'cycleID', validSelection(ctx), 'cycles',
-                    'cycleID', validSelection(ctx).replace(/s$/, 'ID'), 'cycleID');
-        }   
+        const query = pformat(`select %I, %I, %I, %I from %I 
+                             where %I in (select c.%I from %I c)`,
+                             'cycleID', 'accountID', 'marketID',
+                             'routeID', 'transactions', 'cycleID',
+                             'cycleID', 'cycles');   
             dbConnection.query(query, (error, tuples) => {
             if (error) {
                 console.log("Connection error in TableViewController::getViewSelectionData", error);
@@ -36,10 +25,15 @@ const getViewSelectionData = async ctx => {
     });
 }
 
-/*
-const getCycles = async ctx => {
+
+const getViewSelectionMaxes = async ctx => {
     return new Promise((resolve, reject) => {
-        const query = pformat('select %I from %I', 'cycleID', 'cycles');
+        const query = pformat(`select max(%I) "maxCycleID", max(%I) "maxAccountID",
+                             max(%I) "maxMarketID", max(%I) "maxRouteID" from %I 
+                             where %I in (select c.%I from %I c)`,
+                             'cycleID', 'accountID', 'marketID',
+                             'routeID', 'transactions', 'cycleID',
+                             'cycleID', 'cycles');   
         dbConnection.query(query, (error, tuples) => {
             if (error) {
               console.log("Connection error in TableViewController::getCycles", error);
@@ -55,8 +49,9 @@ const getCycles = async ctx => {
         ctx.status = 500;
     });
 }
-*/
+
 
 module.exports = {
-    getViewSelectionData
+    getViewSelectionData,
+    getViewSelectionMaxes
 };

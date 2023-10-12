@@ -197,35 +197,23 @@ export default function MainDrawer({title, user, logoutAction}) {
         setDropOpen(!dropOpen);
     }
 
-    function determineRequest(api, requestIndex) {
-        switch (requestIndex) {
-          case 0:
-              return api.getTransactionsPerCycleByAccountID;
-          case 1:
-              return api.getTransactionsPerCycleByRouteID;
-          case 2:
-              return api.getTransactionsPerCycleForAllRoutes;
-          case 3:
-              return api.getTransactionsPerCycleByMarketID;
-
-          default:
-            return api.getViewSelectionMaxes;
-        }
-    }
-
     useEffect(() => {
         const api = new API();
         console.log('Requesting viewSortSelection data from the API');
 
-        async function getViewSelection(request) {
-            const viewSelectionJSONData = await (dropOpen ? request(anchorIDs) : api.getViewSelectionData());
+        async function getViewSelection() {
+            const viewSelectionJSONData = await (
+                                          anchorIDs
+                                          ? api.getViewSelectionData()
+                                          : api.getViewSelectionMaxes()
+                                          );
             console.log(`Data for viewSortSelection from the API_Interface ${JSON.stringify(viewSelectionJSONData)}`);
             setViewColumns(viewSelectionJSONData.data);
-            if (!anchorIDs) setAnchorIDs(viewSelectionJSONData.data['0']);
+            if (!anchorIDs) setAnchorIDs(viewSelectionJSONData.data[0]);
         }
 
-        getViewSelection(determineRequest(api, target));
-    }, [dropOpen, target]);
+        getViewSelection();
+    }, [anchorIDs, target]);
 
     return (
         <Box sx={{ display: 'flex' }}>

@@ -50,7 +50,7 @@ const getTransactionCountPerCycle = async ctx => {
             return resolve();
         });
     }).catch(err => {
-        console.log("Database connection error in getTransactionsPerCycle.", err);
+        console.log("Database connection error in getTransactionCountPerCycle.", err);
         // The UI side will have to look for the value of status and
         // if it is not 200, act appropriately.
         ctx.body = [];

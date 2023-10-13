@@ -70,8 +70,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-const TopBar = ({open, handleDrawerOpen, setAnchorIDs, viewColumns,
-                 selectedItem, title, user, logoutAction}) => {
+const TopBar = ({open, handleDrawerOpen, anchorIDs, setAnchorIDs,
+                setNumTransactions, viewColumns, selectedItem, title,
+                user, logoutAction}) => {
     // This component is responsible for rendering the Toolbar that is drawn
     // at the top of the drawer.
 
@@ -98,7 +99,7 @@ const TopBar = ({open, handleDrawerOpen, setAnchorIDs, viewColumns,
                     </Box>
                     {
                         viewColumns &&
-                        <MenuSet setAnchorIDs={setAnchorIDs} selectedItem={selectedItem} options={viewColumns}/>
+                        <MenuSet anchorIDs={anchorIDs} setAnchorIDs={setAnchorIDs} setNumTransactions={setNumTransactions} selectedItem={selectedItem} options={viewColumns}/>
                     }
                     <Box width="100%" justifyContent="right" flex={1}>
                         <Typography variant="h7" noWrap component="div" align="right" onClick={() => logoutAction()}>
@@ -172,6 +173,7 @@ const findSelectedComponent = (selectedItem, dropOpen, dropDownTarget, params) =
 
 export default function MainDrawer({title, user, logoutAction}) {
     const theme = useTheme();
+    const [numTransactions, setNumTransactions] = useState({cycleID: 0, tot_transactions: 0});
     const [open, setOpen] = useState(false);
     const [dropOpen, setDropOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState('Summary');
@@ -214,11 +216,18 @@ export default function MainDrawer({title, user, logoutAction}) {
                                           ? api.getViewSelectionData()
                                           : api.getViewSelectionMaxes()
                                           );
-            console.log(`Data for viewSortSelection from the API_Interface ${JSON.stringify(viewSelectionJSONData)}`);
+            console.log(`Data for viewSelection from the API_Interface ${JSON.stringify(viewSelectionJSONData)}`);
             setViewColumns(viewSelectionJSONData.data);
             if (!anchorIDs) setAnchorIDs(viewSelectionJSONData.data[0]);
         }
+        
+        async function getTransactionsThisCycle() {
+            const numTransactionsJSONData = await api.getTransactionCountPerCycle(anchorIDs);
+            console.log(`Data for numTransactionsJSONData from the API_Interface ${JSON.stringify(numTransactionsJSONData)}`);
+            setNumTransactions(numTransactionsJSONData.data[0]);
+        }
 
+        if (numTransactions.cycleID !== anchorIDs.cycleID) getTransactionsThisCycle();
         getViewSelection();
     }, [anchorIDs, target]);
 
@@ -227,7 +236,9 @@ export default function MainDrawer({title, user, logoutAction}) {
             <CssBaseline />
             <TopBar title={title} open={open} viewColumns={viewColumns}
                     handleDrawerOpen={handleDrawerOpen} user={user}
+                    anchorIDs={anchorIDs}
                     setAnchorIDs={setAnchorIDs}
+                    setNumTransactions={setNumTransactions}
                     logoutAction={logoutAction}
                     selectedItem={selectedItem}/>
             <Drawer
@@ -262,15 +273,16 @@ export default function MainDrawer({title, user, logoutAction}) {
             </Drawer>
             {
                 (open && viewColumns && !selectedItem.match(/[sS]ummary/))
-                ?   <Main open={open}>
+                ?   <Main open={open} alignItems='space-between'>
                         <Stack>
                             <DrawerHeader />
+                                <Box>
+                                    <Typography>
+                                        Transactions for cycle {anchorIDs.cycleID}:
+                                        {`\n${numTransactions.tot_transactions >= 0 ? numTransactions.tot_transactions : 0}`}
+                                    </Typography>
+                                </Box>
                                 <Stack orientation='horizontal' justifyContent='flex-start' alignItems='flex-end'>
-                                    <Box>
-                                        <Typography>
-                                            {}
-                                        </Typography>
-                                    </Box>
                                     {
                                         Object.keys(anchorIDs).map(key =>
                                         <Box>
@@ -282,8 +294,14 @@ export default function MainDrawer({title, user, logoutAction}) {
                             {findSelectedComponent(selectedItem, dropOpen, target, anchorIDs).component}
                         </Stack>
                     </Main>
-                :   <Main open={open}>
+                :   <Main open={open} alignItems='space-between'>
                         <DrawerHeader />
+                            <Box>
+                                <Typography>
+                                    Transactions for cycle {anchorIDs.cycleID}:
+                                    {`\n${numTransactions.tot_transactions >= 0 ? numTransactions.tot_transactions : 0}`}
+                                </Typography>
+                            </Box>
                             <Stack orientation='horizontal' justifyContent='flex-start' alignItems='flex-end'>
                                 {
                                     Object.keys(anchorIDs).map(key =>

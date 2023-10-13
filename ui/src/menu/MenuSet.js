@@ -5,7 +5,7 @@ import {Stack, Button} from '@mui/material';
 
 const ITEM_HEIGHT = 48;
 
-export default function MenuSet({setAnchorIDs, selectedItem, options}) {
+export default function MenuSet({anchorIDs, setAnchorIDs, setNumTransactions, selectedItem, options}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dbPacketKeys = Object.keys(options[0]);
@@ -32,6 +32,7 @@ export default function MenuSet({setAnchorIDs, selectedItem, options}) {
       default:
         break;
     }
+    setNumTransactions(options[idx]['cycleID']);
     setAnchorIDs(newAnchorIDs);
     setAnchorEl(null);
   };

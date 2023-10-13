@@ -80,13 +80,43 @@ const marketsTableAttributes = [
 
 const routesTableAttributes = [
     {
+        title: 'Route ID',
+        attributeDBName: 'routeID',
+        align: 'left'
+    },
+    {
         title: 'Route Name',
         attributeDBName: 'routeName',
         align: 'left'
     },
     {
-        title: 'Route ID',
-        attributeDBName: 'routeID',
+        title: 'Employee ID',
+        attributeDBName: 'employeeID',
+        align: 'left'
+    },
+    {
+        title: 'Market ID',
+        attributeDBName: 'marketID',
+        align: 'left'
+    },
+    {
+        title: 'Cycle ID',
+        attributeDBName: 'cycleID',
+        align: 'left'
+    },
+    {
+        title: 'Status',
+        attributeDBName: 'status',
+        align: 'left'
+    },
+    {
+        title: 'Last Modified',
+        attributeDBName: 'lastModified',
+        align: 'left'
+    },
+    {
+        title: 'Date Created',
+        attributeDBName: 'dateCreated',
         align: 'left'
     },
     {

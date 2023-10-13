@@ -10,6 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import RowDescriptor from '../RowDescriptor';
 
 
 export default function MarketsTable(props) {
@@ -66,7 +67,7 @@ export default function MarketsTable(props) {
                         <TableBody>
                             {
                                 markets.map((market, idx) => (
-                                    <TRow marketObject={market} key={idx}/>
+                                    <RowDescriptor rowObject={market} key={idx} />
                                 ))
                             }
                         </TableBody>

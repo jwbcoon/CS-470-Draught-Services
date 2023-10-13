@@ -39,14 +39,13 @@ const getRouteTransactionsByRouteID = (ctx) => {
             const query = pformat(`
                        SELECT *
                         FROM 
-                            routes
+                            transactions 
                         WHERE 
-                            routeID = %L
-                        LIMIT 100
-                        `, ctx.params.routeID, 'routeName');
+                            %I = %L
+                        `, 'routeID', ctx.params.routeID);
             dbConnection.query(query, (error, tuples) => {
                 if (error) {
-                    console.log("Connection error in RoutesController::routeWithRouteID", error);
+                    console.log("Connection error in RoutesController::getRouteTransactionsByRouteID", error);
                     ctx.body = [];
                     ctx.status = 200;
                     return reject(error);
@@ -56,7 +55,7 @@ const getRouteTransactionsByRouteID = (ctx) => {
                 return resolve();
             });
         }).catch(err => {
-            console.log("Database connection error in allRoutes.", err);
+            console.log("Database connection error in getRouteTransactionsByRouteID", err);
             // The UI side will have to look for the value of status and
             // if it is not 200, act appropriately.
             ctx.body = [];

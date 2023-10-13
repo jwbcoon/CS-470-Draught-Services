@@ -10,7 +10,7 @@ const allAccounts = async (ctx) => {
                        SELECT *
                         FROM 
                             accounts
-                        ORDER BY %I LIMIT 100
+                        ORDER BY %I LIMIT 1000
                         `, 'accountName');
         dbConnection.query(query, (error, tuples) => {
             if (error) {
@@ -38,7 +38,6 @@ const getAccountTransactionsByAccountID = (ctx) => {
                             transactions
                         WHERE 
                             %I = %L
-                        LIMIT 100
                         `, 'accountID', ctx.params.accountID);
             dbConnection.query(query, (error, tuples) => {
                 if (error) {

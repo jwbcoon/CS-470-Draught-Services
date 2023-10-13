@@ -10,13 +10,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import RowDescriptor from '../RowDescriptor';
 
 
 export default function RoutesTable(props) {
 
 
     const [routes, setRoutes] = useState([]);
-    console.log(`in RouteTTable routes contains is ${JSON.stringify(routes)}`);
+    console.log(`in RouteTable routes contains is ${JSON.stringify(routes)}`);
 
 
     useEffect(() => {
@@ -66,7 +67,7 @@ export default function RoutesTable(props) {
                         <TableBody>
                             {
                                 routes.map((route, idx) => (
-                                    <TRow routeObject={route} key={idx}/>
+                                    <RowDescriptor rowObject={route} key={idx} />
                                 ))
                             }
                         </TableBody>

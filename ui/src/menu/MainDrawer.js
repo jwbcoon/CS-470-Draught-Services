@@ -177,7 +177,14 @@ export default function MainDrawer({title, user, logoutAction}) {
     const [selectedItem, setSelectedItem] = useState('Summary');
     const [target, setTarget] = useState(0);
     const [viewColumns, setViewColumns] = useState(undefined);
-    const [anchorIDs, setAnchorIDs] = useState(undefined);
+    const [anchorIDs, setAnchorIDs] = useState(
+        {
+            cycleID: 0,
+            accountID: 0,
+            marketID: 0,
+            routeID: 0
+        }
+    );
 
     console.log(`in MainDrawer;\ntarget is: ${target}\nanchorIDs is: ${JSON.stringify(anchorIDs)}`);
 
@@ -249,20 +256,43 @@ export default function MainDrawer({title, user, logoutAction}) {
                                            onDropDownClick={handleDropDownClick}
                                            target={target}
                                            setTarget={setTarget}
-                                          menuItemTitles={presentationComponents().map(comp => comp.title)}
+                                           menuItemTitles={presentationComponents().map(comp => comp.title)}
                     />
                 </List>
             </Drawer>
             {
-                open && viewColumns && !selectedItem.match(/[sS]ummary/)
+                (open && viewColumns && !selectedItem.match(/[sS]ummary/))
                 ?   <Main open={open}>
-                        <Stack divider={<Divider orientation='horizontal'/>}>
+                        <Stack>
                             <DrawerHeader />
+                                <Stack orientation='horizontal' justifyContent='flex-start' alignItems='flex-end'>
+                                    <Box>
+                                        <Typography>
+                                            {}
+                                        </Typography>
+                                    </Box>
+                                    {
+                                        Object.keys(anchorIDs).map(key =>
+                                        <Box>
+                                            <Typography>{`${key}: ${anchorIDs[key]}`}</Typography>
+                                        </Box>
+                                        )
+                                    }
+                                </Stack>
                             {findSelectedComponent(selectedItem, dropOpen, target, anchorIDs).component}
                         </Stack>
                     </Main>
                 :   <Main open={open}>
                         <DrawerHeader />
+                            <Stack orientation='horizontal' justifyContent='flex-start' alignItems='flex-end'>
+                                {
+                                    Object.keys(anchorIDs).map(key =>
+                                    <Box>
+                                        <Typography>{`${key}: ${anchorIDs[key]}`}</Typography>
+                                    </Box>
+                                    )
+                                }
+                            </Stack>
                         {findSelectedComponent(selectedItem, dropOpen, target, anchorIDs).component}
                     </Main>
             }

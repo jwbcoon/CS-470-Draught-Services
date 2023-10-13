@@ -37,7 +37,7 @@ const getMarketTransactionsByMarketID = ctx => {
                             transactions
                         WHERE 
                             %I = %L
-                        LIMIT 100
+                        LIMIT 2500
                         `, 'marketID', ctx.params.marketID);
             dbConnection.query(query, (error, tuples) => {
                 if (error) {

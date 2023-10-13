@@ -10,6 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import trimDate from '../util/util.js';
 
 
 function determineRequest(api, requestIndex) {
@@ -59,7 +60,7 @@ export default function TransactionTable({dropOpen, requestIndex, params}) {
                     <TableCell key={idx}
                                align={attr.align}>
                         {
-                            transactionObject[attr.attributeDBName]
+                            trimDate(transactionObject, attr.attributeDBName)
                         }
                     </TableCell>)
             }

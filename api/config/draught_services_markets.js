@@ -29,7 +29,7 @@ const marketsRouter = require('koa-router') ({
 
 marketsRouter.use(VerifyJWT);
 marketsRouter.get('/all-markets', Authorize('admin'), MarketsController.allMarkets, err => console.log(`draught_services_routes: ${err}`));
-marketsRouter.get('/:marketID', Authorize('admin'), MarketsController.getMarketByMarketID, err => console.log(`draught_services_routes: ${err}`));
+marketsRouter.get('/:marketID', Authorize('admin'), MarketsController.getMarketTransactionsByMarketID, err => console.log(`draught_services_routes: ${err}`));
 
 
 /**

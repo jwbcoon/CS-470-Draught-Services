@@ -37,7 +37,7 @@ export default class APIInterface {
         return axiosAgent.get(`markets/all-markets`);
     }
 
-    async getMarketByMarketID(marketID) {
+    async getMarketTransactionsByMarketID(marketID) {
         return axiosAgent.get(`markets/${marketID}`);
     }
 
@@ -45,7 +45,7 @@ export default class APIInterface {
         return axiosAgent.get(`routes/all-routes`);
     }
 
-    async routesWithID(routeID) {
+    async getRouteTransactionsByRouteID(routeID) {
         return axiosAgent.get(`routes/${routeID}`);
     }
 
@@ -53,7 +53,7 @@ export default class APIInterface {
         return axiosAgent.get(`accounts/all-accounts`);
     }
 
-    async getAccountByAccountID(accountID) {
+    async getAccountTransactionsByAccountID(accountID) {
         return axiosAgent.get(`accounts/${accountID}`);
     }
 

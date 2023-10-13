@@ -1,5 +1,10 @@
 const dbConnection = require('../../database/connection');
+const dateFormat = require('dateformat');
 const pformat = require('pg-format');
+
+function now() {
+    return dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
+}
 
 const getTransactions = async ctx => {
     console.log('Querying getTransaction');

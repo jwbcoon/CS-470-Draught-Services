@@ -6,11 +6,12 @@ const getViewSelectionData = async ctx => {
     return new Promise((resolve, reject) => {
         const query = pformat(`select %I, %I, %I, %I from %I 
                              where %I in (select c.%I from %I c)
-                             group by %I, %I, %I, %I`,
+                             group by %I, %I, %I, %I limit %L`,
                              'cycleID', 'accountID', 'marketID',
                              'routeID', 'transactions', 'cycleID',
                              'cycleID', 'cycles', 'cycleID',
-                             'accountID', 'marketID', 'routeID');   
+                             'accountID', 'marketID', 'routeID',
+                             200);   
             dbConnection.query(query, (error, tuples) => {
             if (error) {
                 console.log("Connection error in TableViewController::getViewSelectionData", error);

@@ -32,7 +32,7 @@ const routesRouter = require('koa-router')({
 
 routesRouter.use(VerifyJWT);
 routesRouter.get('/all-routes', Authorize('admin'), RoutesController.allRoutes, err => console.log(`allRoutes ran into an error: ${err}`));
-routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.routeWithRouteID);
+routesRouter.get('/:routeID/', Authorize('admin'), RoutesController.getRouteTransactionsByRouteID);
 
 
 /**

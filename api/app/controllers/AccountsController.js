@@ -10,8 +10,8 @@ const allAccounts = async (ctx) => {
                        SELECT *
                         FROM 
                             accounts
-                        ORDER BY %I LIMIT %L
-                        `, 'accountName', 10000);
+                        ORDER BY %I LIMIT 100
+                        `, 'accountName');
         dbConnection.query(query, (error, tuples) => {
             if (error) {
                 console.log("Connection error in AccountsController::allAccounts", error);
@@ -30,29 +30,29 @@ const allAccounts = async (ctx) => {
     });
 }
 
-const getAccountByAccountID = (ctx) => {
+const getAccountTransactionsByAccountID = (ctx) => {
         return new Promise((resolve, reject) => {
             const query = pformat(`
                        SELECT *
                         FROM 
-                            accounts
+                            transactions
                         WHERE 
                             %I = %L
-                        ORDER BY %I
-                        `, 'accountID', ctx.params.accountID, 'accountName');
+                        LIMIT 100
+                        `, 'accountID', ctx.params.accountID);
             dbConnection.query(query, (error, tuples) => {
                 if (error) {
-                    console.log("Connection error in AccountsController::getAccountByAccountID", error);
+                    console.log("Connection error in AccountsController::getAccountTransactionsByAccountID", error);
                     ctx.body = [];
                     ctx.status = 200;
                     return reject(error);
                 }
-                ctx.body = tuples;
+                ctx.body = tuples['rows'];
                 ctx.status = 200;
                 return resolve();
             });
         }).catch(err => {
-            console.log("Database connection error in getAccountByAccountID.", err);
+            console.log("Database connection error in getAccountTransactionsByAccountID", err);
             // The UI side will have to look for the value of status and
             // if it is not 200, act appropriately.
             ctx.body = [];
@@ -62,6 +62,6 @@ const getAccountByAccountID = (ctx) => {
 
 module.exports = {
     allAccounts,
-    getAccountByAccountID
+    getAccountTransactionsByAccountID
 };
 

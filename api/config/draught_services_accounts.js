@@ -28,8 +28,8 @@ const accountsRouter = require('koa-router') ({
 })
 
 accountsRouter.use(VerifyJWT);
-accountsRouter.get('/all-accounts', Authorize('admin'), AccountsController.allAccounts, err => console.log(`draught_services_routes: ${err}`));
-accountsRouter.get('/:accountID', Authorize('admin'), AccountsController.getAccountByAccountID, err => console.log(`draught_services_routes: ${err}`));
+accountsRouter.get('/all-accounts', Authorize('admin'), AccountsController.allAccounts, err => console.log(`draught_services_accounts: ${err}`));
+accountsRouter.get('/:accountID', Authorize('admin'), AccountsController.getAccountTransactionsByAccountID, err => console.log(`draught_services_accounts: ${err}`));
 
 
 /**

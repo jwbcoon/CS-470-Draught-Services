@@ -12,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-export default function RouteTable(props) {
+export default function MarketsTable(props) {
 
 
     const [markets, setMarkets] = useState([]);

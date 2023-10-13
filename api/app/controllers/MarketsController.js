@@ -29,16 +29,16 @@ const allMarkets = async (ctx) => {
     });
 }
 
-const getMarketByMarketID = (ctx) => {
+const getMarketTransactionsByMarketID = ctx => {
         return new Promise((resolve, reject) => {
             const query = pformat(`
                        SELECT *
                         FROM 
-                            markets
+                            transactions
                         WHERE 
                             %I = %L
-                        ORDER BY %I
-                        `, 'marketID', ctx.params.marketID, 'marketName');
+                        LIMIT 100
+                        `, 'marketID', ctx.params.marketID);
             dbConnection.query(query, (error, tuples) => {
                 if (error) {
                     console.log("Connection error in MarketsController::getMarketByMarketID", error);
@@ -46,7 +46,7 @@ const getMarketByMarketID = (ctx) => {
                     ctx.status = 200;
                     return reject(error);
                 }
-                ctx.body = tuples;
+                ctx.body = tuples['rows'];
                 ctx.status = 200;
                 return resolve();
             });
@@ -61,5 +61,5 @@ const getMarketByMarketID = (ctx) => {
 
 module.exports = {
     allMarkets,
-    getMarketByMarketID
+    getMarketTransactionsByMarketID
 };

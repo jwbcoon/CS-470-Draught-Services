@@ -34,7 +34,7 @@ const allRoutes = async (ctx) => {
     });
 }
 
-const routeWithRouteID = (ctx) => {
+const getRouteTransactionsByRouteID = (ctx) => {
         return new Promise((resolve, reject) => {
             const query = pformat(`
                        SELECT *
@@ -42,7 +42,7 @@ const routeWithRouteID = (ctx) => {
                             routes
                         WHERE 
                             routeID = %L
-                        ORDER BY %I
+                        LIMIT 100
                         `, ctx.params.routeID, 'routeName');
             dbConnection.query(query, (error, tuples) => {
                 if (error) {
@@ -51,7 +51,7 @@ const routeWithRouteID = (ctx) => {
                     ctx.status = 200;
                     return reject(error);
                 }
-                ctx.body = tuples;
+                ctx.body = tuples['rows'];
                 ctx.status = 200;
                 return resolve();
             });
@@ -66,5 +66,5 @@ const routeWithRouteID = (ctx) => {
 
 module.exports = {
     allRoutes,
-    routeWithRouteID
+    getRouteTransactionsByRouteID
 };

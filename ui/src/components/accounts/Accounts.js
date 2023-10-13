@@ -10,9 +10,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import RowDescriptor from '../RowDescriptor';
 
 
-export default function RouteTable(props) {
+export default function AccountsTable(props) {
 
 
     const [accounts, setAccounts] = useState([]);
@@ -31,21 +32,6 @@ export default function RouteTable(props) {
         getAccounts();
     }, []);
 
-    const TRow = ({accountObject}) => {
-        return <TableRow
-            sx={{'&:last-child td, &:last-child th': {border: 0}}}
-        >
-            {
-                accountsTableAttributes.map((attr, idx) =>
-                    <TableCell key={idx}
-                               align={attr.align}>
-                        {
-                            accountObject[attr.attributeDBName]
-                        }
-                    </TableCell>)
-            }
-        </TableRow>
-    }
 
     return <Fragment>
         {
@@ -65,9 +51,9 @@ export default function RouteTable(props) {
                         </TableHead>
                         <TableBody>
                             {
-                                accounts.map((account, idx) => (
-                                    <TRow accountObject={account} key={idx}/>
-                                ))
+                                accounts.map((account, idx) =>
+                                    <RowDescriptor rowObject={account} key={idx} />
+                                )
                             }
                         </TableBody>
                     </Table>

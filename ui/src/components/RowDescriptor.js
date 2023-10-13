@@ -1,9 +1,11 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, Fragment} from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import * as DBattrs from './DBattrs.js';
@@ -35,25 +37,10 @@ const determineRequest = (api, rowObject) => {
 }
 
 
-const TRow = ({rowObject}) => {
-    return <TableRow
-        sx={{'&:last-child td, &:last-child th': {border: 0}}}
-    >
-        {
-            determineAttributes(rowObject).map((attr, idx) =>
-                <TableCell key={idx}
-                            align={attr.align}>
-                    {
-                        rowObject[attr.attributeDBName]
-                    }
-                </TableCell>)
-        }
-    </TableRow>
-}
 
 
 export default function RowDescriptor({rowObject}) {
-  const [state, setState] = useState({open: false});
+  const [open, setOpen] = useState(false);
   const [transactions, setTransactions] = useState([{
                                                       transactionID: 0,
                                                       transactionDate: '',
@@ -69,12 +56,9 @@ export default function RowDescriptor({rowObject}) {
                                                    }]);
   console.log(`In RowDescriptor, transactions is: ${JSON.stringify(transactions)}`);
 
-  const toggleDrawer = ({open}) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
-
-    setState(open);
+  const toggleDrawer = () => {
+    console.log(`In RowDescriptor::toggleDrawer open is: ${open}`);
+    setOpen(!open);
   };
 
   useEffect(() => {
@@ -82,54 +66,84 @@ export default function RowDescriptor({rowObject}) {
       
       async function getTransaction(request) {
           const transactionsJSONString = await request();
-          console.log(`RowDescriptor::transaction from the DB ${JSON.stringify(transactionsJSONString)}`);
+          //console.log(`RowDescriptor::transactions from the DB ${JSON.stringify(transactionsJSONString)}`);
           setTransactions(transactionsJSONString.data);
       }
 
       getTransaction(determineRequest(api, rowObject));
-  }, [state.open]);
+  }, []);
 
   const list = transactions => (
     <Box
-      sx={{ width: 'auto' }}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
+      sx={{ width: '100%' }}
+      onClick={() => toggleDrawer()}
     >
-      <List>
-        {DBattrs.transactionsTableAttributes.map((attr, idx) => (
-          <ListItem key={idx} disablePadding
-                    justifyContent='center' alignItems='center'>
-            {attr.title}
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {transactions.map((transaction, idx) => (
-          <ListItem key={idx} disablePadding>
-              {transaction}
-          </ListItem>
-        ))}
-      </List>
+      <Stack >
+          <Stack orientation='horizontal'>
+            {
+              DBattrs.transactionsTableAttributes.map((attr, idx) => (
+                  <Box key={idx}
+                            justifyContent='center' alignItems='center'>
+                    {attr.title}
+                  </Box>
+              ))
+            }
+          </Stack>
+          <List>
+            {
+              transactions.map((transaction, idx) => (
+                  <ListItem key={idx} disablePadding>
+                      <Stack>
+                          {
+                              Object.keys(transaction).map(key => 
+                                  <Box>
+                                      <Typography justifyContent='center' alignItems='center'>
+                                          {key}: {transaction[key]}
+                                      </Typography>
+                                  </Box>
+                              )
+                          }
+                      </Stack>
+                  </ListItem>
+              ))
+            }
+          </List>
+      </Stack>
     </Box>
   );
 
-  return (
-    <>
-      {
-        <>
-          <TRow rowObject={rowObject} onClick={toggleDrawer(state, true)}/>
-          <Drawer
-            anchor='top'
-            open={state.open}
-            onClose={toggleDrawer(state, false)}
-          >
-            {list(transactions)}
-          </Drawer>
-        </>
-      }
-    </>
-  );
+  const TRow = ({rowObject, onClick}) => {
+      return (
+          <>
+              <TableRow
+                  sx={{
+                    '&:last-child td, &:last-child th': {border: 0},
+                  }}
+                  onClick={onClick}
+              >
+                  {
+                      determineAttributes(rowObject).map((attr, idx) =>
+                          <TableCell key={idx}
+                                      align={attr.align}>
+                              {
+                                  rowObject[attr.attributeDBName]
+                              }
+                          </TableCell>)
+                  }
+              </TableRow>
+              {
+                  open &&
+                  <TableRow
+                    open={open}
+                    onClick={() => toggleDrawer()}
+                  >
+                    <TableCell colspan='100%'>{list(transactions)}</TableCell>
+                  </TableRow>
+              }
+          </>
+    )
+  }
+
+  return <TRow rowObject={rowObject} onClick={toggleDrawer}/>
 }
 

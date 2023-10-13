@@ -213,7 +213,7 @@ export default function MainDrawer({title, user, logoutAction}) {
         }
 
         getViewSelection();
-    }, []);
+    }, [anchorIDs, target]);
 
     return (
         <Box sx={{ display: 'flex' }}>

@@ -1,64 +1,81 @@
 #!/bin/bash
 
-usage() { echo "Usage: $0 [load | start | restart | stop]" 1>&2; exit 1; }
+usage() {
+	echo "Usage: $0 [load | init | start | restart | stop]" 1>&2
+	exit 1
+}
+
+init() {
+	echo "Initialzing the draught_services project..."
+	(
+		cd ./api
+		rm -rf node_modules/
+		npm install
+	)
+	echo "API server initialized, configuring UI server..."
+	(
+		cd ./ui
+		rm -rf node_modules/
+		npm install
+	)
+	echo "Finished!"
+}
 
 loadtables() {
-    echo "running load tables"
-    psql -U lej -d draught_services -a -f ./database/ssi_database.sql
-    for file in ./database/schemas/*.sql
-    do
-        psql -U lej -d draught_services -a -f $file
-    done
+	echo "running load tables"
+	psql -U lej -d draught_services -a -f ./database/ssi_database.sql
+	for file in ./database/schemas/*.sql; do
+		psql -U lej -d draught_services -a -f $file
+	done
 
-    for file in ./database/dumps/*.sql
-    do
-        psql -U lej -d draught_services -a -f $file
-    done
+	for file in ./database/dumps/*.sql; do
+		psql -U lej -d draught_services -a -f $file
+	done
 }
 
 start() {
-    if test -f ./.b_pids.tmp
-    then
-        rm ./.b_pids.tmp
-    fi
-    (
-        cd ./api
-        nohup node api_server.js &
-        echo $! >> ../.b_pids.tmp
-    ) > ./logs/.api-start-log.tmp
-    (
-        cd ./ui
-        nohup node ./node_modules/react-scripts/scripts/start.js &  
-        echo $! >> ../.b_pids.tmp
-    ) > ./logs/.ui-start-log.tmp
-    cat ./logs/.api-start-log.tmp | cat ./logs/.ui-start-log.tmp > ./logs/start.log
-    rm ./logs/.*log.tmp
+	if test -f ./.b_pids.tmp; then
+		rm ./.b_pids.tmp
+	fi
+	(
+		cd ./api
+		nohup node index.js &
+		echo $! >>../.b_pids.tmp
+	) >./logs/.api-start-log.tmp
+	(
+		cd ./ui
+		nohup node ./node_modules/react-scripts/scripts/start.js &
+		echo $! >>../.b_pids.tmp
+	) >./logs/.ui-start-log.tmp
+	cat ./logs/.api-start-log.tmp | cat ./logs/.ui-start-log.tmp >./logs/start.log
+	rm ./logs/.*log.tmp
 }
 
 stop() {
-    if test -f ./.b_pids.tmp
-    then
-        cat .b_pids.tmp | xargs kill
-        rm .b_pids.tmp
-    fi
+	if test -f ./.b_pids.tmp; then
+		cat .b_pids.tmp | xargs kill
+		rm .b_pids.tmp
+	fi
 }
 
 case $1 in
-        start)
-            start
-            ;;
-        restart)
-            stop
-            start
-            ;;
-        stop)
-            stop
-            ;;
-        load)
-            loadtables
-            ;;
-        *)
-            usage
-            ;;
+start)
+	start
+	;;
+restart)
+	stop
+	start
+	;;
+stop)
+	stop
+	;;
+load)
+	loadtables
+	;;
+init)
+	init
+	;;
+*)
+	usage
+	;;
 esac
-

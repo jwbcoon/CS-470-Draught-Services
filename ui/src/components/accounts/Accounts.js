@@ -39,12 +39,19 @@ export default function AccountsTable(props) {
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 650}} aria-label="account table">
                         <TableHead>
-                            <TableRow>
+                            <TableRow sx={{ backgroundColor: '#9eb9ef' }}>
                                 {
                                     accountsTableAttributes.map((attr, idx) =>
                                         <TableCell  key={idx}
-                                                    align={attr.align}>
-                                            {attr.title}
+                                                    align={attr.align}
+                                                    sx={{m: 'auto', p: '0 30px 0 30px'}}>
+                                            <h4 style={
+                                                {
+                                                    color: '#ffffff',
+                                                    textShadow: '1px 1px 2px #000000'
+                                                }}>
+                                                {attr.title}
+                                            </h4>
                                         </TableCell>)
                                 }
                             </TableRow>

@@ -32,21 +32,6 @@ export default function RoutesTable(props) {
         getRoutes();
     }, []);
 
-    const TRow = ({routeObject}) => {
-        return <TableRow
-            sx={{'&:last-child td, &:last-child th': {border: 0}}}
-        >
-            {
-                routesTableAttributes.map((attr, idx) =>
-                    <TableCell key={idx}
-                               align={attr.align}>
-                        {
-                            routeObject[attr.attributeDBName]
-                        }
-                    </TableCell>)
-            }
-        </TableRow>
-    }
 
     return <Fragment>
         {
@@ -54,12 +39,19 @@ export default function RoutesTable(props) {
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 650}} aria-label="route table">
                         <TableHead>
-                            <TableRow>
+                            <TableRow sx={{ backgroundColor: '#9eb9ef' }}>
                                 {
                                     routesTableAttributes.map((attr, idx) =>
                                         <TableCell  key={idx}
-                                                    align={attr.align}>
-                                            {attr.title}
+                                                    align={attr.align}
+                                                    sx={{m: 'auto', p: '0 30px 0 30px'}}>
+                                            <h4 style={
+                                                {
+                                                    color: '#ffffff',
+                                                    textShadow: '1px 1px 2px #000000'
+                                                }}>
+                                                {attr.title}
+                                            </h4>
                                         </TableCell>)
                                 }
                             </TableRow>

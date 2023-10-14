@@ -29,6 +29,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
+        minHeight: '100vh',
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -122,7 +123,8 @@ const PresentationListItems = ({menuItemTitles, selectedItem, target, setTarget,
                     return (
                         <>
                             <ListItem button onClick={() => onClick(title)} key={title}>
-                                <ListItemText primary={title} key={title}/>
+                                <ListItemText key={title}/>
+                                <h4>{title}</h4>
                                 {
                                     selectedItem === title &&
                                     <ListItemIcon>
@@ -143,7 +145,8 @@ const PresentationListItems = ({menuItemTitles, selectedItem, target, setTarget,
                 else
                     return (
                         <ListItem button onClick={() => onClick(title)} key={title}>
-                            <ListItemText primary={title} key={title}/>
+                            <ListItemText key={title}/>
+                            <h4>{title}</h4>
                             {
                                 selectedItem === title && <ListItemIcon><ChevronRightIcon/></ListItemIcon>
                             }
@@ -171,6 +174,15 @@ const findSelectedComponent = (selectedItem, dropOpen, dropDownTarget, params) =
     }
 };
 
+
+/*
+ *  Core function/component of the React DOM. Manages the data
+ *  for the stateful components which are layed out in the main
+ *  screen of the application.
+ *
+ *  Every visible component can be traced back to here.
+ *
+ * *************************************************************/
 export default function MainDrawer({title, user, logoutAction}) {
     const theme = useTheme();
     const [numTransactions, setNumTransactions] = useState({cycleID: 0, tot_transactions: 0});
@@ -199,6 +211,7 @@ export default function MainDrawer({title, user, logoutAction}) {
     };
 
     const handleSelectedItem = (title) => {
+        if (dropOpen) setDropOpen(false);
         setSelectedItem(title);
     };
 
@@ -206,6 +219,12 @@ export default function MainDrawer({title, user, logoutAction}) {
         setDropOpen(!dropOpen);
     }
 
+    /*
+    *
+    * Listens for API data for MenuSet buttons and 
+    * displaying transactions per cycle count.
+    *
+    * ****/
     useEffect(() => {
         const api = new API();
         console.log('Requesting viewSortSelection data from the API');
@@ -273,13 +292,13 @@ export default function MainDrawer({title, user, logoutAction}) {
             </Drawer>
             {
                 (open && viewColumns && !selectedItem.match(/[sS]ummary/))
-                ?   <Main open={open} alignItems='space-between'>
+                ?   <Main open={open} alignItems='space-between' sx={{backgroundColor: '#f4f4f4'}}>
                         <Stack>
                             <DrawerHeader />
                                 <Box>
                                     <Typography>
-                                        Transactions for cycle {anchorIDs.cycleID}:
-                                        {`\n${numTransactions.tot_transactions >= 0 ? numTransactions.tot_transactions : 0}`}
+                                        # Transactions for cycle ID {anchorIDs.cycleID}:
+                                        {`\n${numTransactions.tot_transactions >= 0 ? numTransactions.tot_transactions : 0} transactions`}
                                     </Typography>
                                 </Box>
                                 <Stack orientation='horizontal' justifyContent='flex-start' alignItems='flex-end'>
@@ -294,12 +313,12 @@ export default function MainDrawer({title, user, logoutAction}) {
                             {findSelectedComponent(selectedItem, dropOpen, target, anchorIDs).component}
                         </Stack>
                     </Main>
-                :   <Main open={open} alignItems='space-between'>
+                :   <Main open={open} alignItems='space-between' sx={{backgroundColor: '#f4f4f4'}}>
                         <DrawerHeader />
                             <Box>
                                 <Typography>
-                                    Transactions for cycle {anchorIDs.cycleID}:
-                                    {`\n${numTransactions.tot_transactions >= 0 ? numTransactions.tot_transactions : 0}`}
+                                    # Transactions for cycle ID {anchorIDs.cycleID}:
+                                    {`\n${numTransactions.tot_transactions >= 0 ? numTransactions.tot_transactions : 0} transactions`}
                                 </Typography>
                             </Box>
                             <Stack orientation='horizontal' justifyContent='flex-start' alignItems='flex-end'>

@@ -5,6 +5,18 @@ import {Stack, Button} from '@mui/material';
 
 const ITEM_HEIGHT = 48;
 
+/*
+ *
+ *  A set of buttons which grow in number
+ *  according to the number of keys in the
+ *  database packet received by from the api.
+ *
+ *  Presents a selection of values for each key 
+ *  associated with the button, then changes the 
+ *  values for stateful data in passed down from 
+ *  the parent.
+ *
+ * *************************/
 export default function MenuSet({anchorIDs, setAnchorIDs, setNumTransactions, selectedItem, options}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -52,6 +64,7 @@ export default function MenuSet({anchorIDs, setAnchorIDs, setNumTransactions, se
                     aria-expanded={open ? 'true' : undefined}
                     aria-haspopup="true"
                     onClick={handleClick}
+                    sx={{ backgroundColor: '#6495ED', color: '#ffffff', textShadow: '1px 1px 2px #000000' }}
                   >
                       {selectField.replace(/([A-Z][a-zD])/g, ' $1')}
                   </Button>

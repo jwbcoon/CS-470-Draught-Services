@@ -2,37 +2,37 @@ const accountsTableAttributes = [
     {
         title: 'Account Name',
         attributeDBName: 'accountName',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Account ID',
         attributeDBName: 'accountID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Route ID',
         attributeDBName: 'routeID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Market ID',
         attributeDBName: 'marketID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Status',
         attributeDBName: 'status',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Date Created',
         attributeDBName: 'dateCreated',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Last Modified',
         attributeDBName: 'lastModified',
-        align: 'left'
+        align: 'center'
     }
 ]
 
@@ -42,37 +42,37 @@ const marketsTableAttributes = [
     {
         title: 'Market ID',
         attributeDBName: 'marketID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Market Name',
         attributeDBName: 'marketName',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'City',
         attributeDBName: 'city',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'State',
         attributeDBName: 'state',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Status',
         attributeDBName: 'status',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Last Modified',
         attributeDBName: 'lastModified',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Date Created',
         attributeDBName: 'dateCreated',
-        align: 'left'
+        align: 'center'
     }
 ];
 
@@ -82,52 +82,52 @@ const routesTableAttributes = [
     {
         title: 'Route ID',
         attributeDBName: 'routeID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Route Name',
         attributeDBName: 'routeName',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Employee ID',
         attributeDBName: 'employeeID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Market ID',
         attributeDBName: 'marketID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Cycle ID',
         attributeDBName: 'cycleID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Status',
         attributeDBName: 'status',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Last Modified',
         attributeDBName: 'lastModified',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Date Created',
         attributeDBName: 'dateCreated',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Cycle ID',
         attributeDBName: 'cycleID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Date Created',
         attributeDBName: 'dateCreated',
-        align: 'left'
+        align: 'center'
     }
 ];
 
@@ -138,57 +138,57 @@ const transactionsTableAttributes = [
     {
         title: 'Transaction ID',
         attributeDBName: 'transactionID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Transaction Date',
         attributeDBName: 'transactionDate',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Employee ID',
         attributeDBName: 'employeeID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Account ID',
         attributeDBName: 'accountID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Product ID',
         attributeDBName: 'productID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Distributor ID',
         attributeDBName: 'distributorID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Market ID',
         attributeDBName: 'marketID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Route ID',
         attributeDBName: 'routeID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Cycle ID',
         attributeDBName: 'cycleID',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Taps',
         attributeDBName: 'taps',
-        align: 'left'
+        align: 'center'
     },
     {
         title: 'Last Modified',
         attributeDBName: 'lastModified',
-        align: 'left'
+        align: 'center'
     }
 ];
 

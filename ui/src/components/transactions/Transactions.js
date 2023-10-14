@@ -34,7 +34,7 @@ export default function TransactionTable({dropOpen, requestIndex, params}) {
 
 
     const [transactions, setTransactions] = useState([]);
-    const limit = 50;
+    const limit = 800;
     console.log(`in TransactionTable contains ${JSON.stringify(transactions)}`);
     console.log(`TransactionTable::requestIndex is: ${requestIndex} and TransactionTable::params is ${JSON.stringify(params ? params : limit)}`);
 
@@ -74,13 +74,20 @@ export default function TransactionTable({dropOpen, requestIndex, params}) {
                     <TableContainer component={Paper}>
                         <Table sx={{minWidth: 650}} aria-label="transaction table">
                             <TableHead>
-                                <TableRow>
+                                <TableRow sx={{ backgroundColor: '#9eb9ef' }}>
                                     {
                                         transactionsTableAttributes.map((attr, idx) =>
-                                            <TableCell  key={idx}
-                                                        align={attr.align}>
+                                        <TableCell  key={idx}
+                                                    align={attr.align}
+                                                    sx={{m: 'auto', p: '0 30px 0 30px'}}>
+                                            <h4 style={
+                                                {
+                                                    color: '#ffffff',
+                                                    textShadow: '1px 1px 2px #000000'
+                                                }}>
                                                 {attr.title}
-                                            </TableCell>)
+                                            </h4>
+                                        </TableCell>)
                                     }
                                 </TableRow>
                             </TableHead>

@@ -1,13 +1,10 @@
 import {useState, useEffect, Fragment} from 'react';
-import {FixedSizeList} from 'react-window';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import trimDate from './util/util.js';
@@ -15,6 +12,16 @@ import * as DBattrs from './DBattrs.js';
 import API from '../API_Interface/API_Interface';
 
 
+/*
+ *
+ *  Receives a generic database packet and 
+ *  matches it to one of the existing table 
+ *  schemas in the DBattrs.js file, accepting
+ *  databases that match the schema in exact order
+ *  and returning the data when validated, otherwise
+ *  returning an empty array.
+ *
+ * *******************************/
 const determineAttributes = rowObject => {
     const rowKeys = Object.keys(rowObject);
     return Object.values(DBattrs).filter(tableAttrs => {
@@ -24,6 +31,13 @@ const determineAttributes = rowObject => {
 }
 
 
+/*
+ *
+ *  Receives a generic database packet and 
+ *  returns a corresponding query upon validation
+ *  by determineAttributes().
+ *
+ * *********************/
 const determineRequest = (api, rowObject) => {
     const currTable = determineAttributes(rowObject)[0].title.replace(/( Name)|( ID)/,'s').toLowerCase();
     switch (currTable) {
@@ -84,6 +98,13 @@ function VirtualizedList(props) {
 }
 */
 
+/*
+ *
+ *  Returns a TableRow with a hidden DescriptorRow beneath
+ *  it that facilitates api calls to provision detail about
+ *  its corresponding row and table when revealed with a click.
+ *
+ * ***********************/
 export default function RowDescriptor({rowObject}) {
   const [open, setOpen] = useState(false);
   const [transactions, setTransactions] = useState([
@@ -101,10 +122,8 @@ export default function RowDescriptor({rowObject}) {
         lastModified: ''
     }
   ]);
-  console.log(`In RowDescriptor, transactions is: ${JSON.stringify(transactions)}`);
 
   const toggleOpen = () => {
-    console.log(`In RowDescriptor::toggleDrawer open is: ${open}`);
     setOpen(!open);
   };
 
@@ -120,7 +139,7 @@ export default function RowDescriptor({rowObject}) {
       getTransaction(determineRequest(api, rowObject));
   }, []);
 
-  const list = transactions => (
+  const descriptorList = transactions => (
     <Box
       sx={{ width: '100%' }}
       onClick={() => toggleOpen()}
@@ -182,8 +201,22 @@ export default function RowDescriptor({rowObject}) {
                   <TableRow
                     open={open}
                     onClick={() => toggleOpen()}
+                    sx={{
+                        backgroundColor: '#e2e2e2'
+                    }}
                   >
-                    <TableCell colSpan='100%'>{list(transactions)}</TableCell>
+                    <TableCell colSpan='100%'>
+                        {
+                            transactions.length > 0 
+                          ? descriptorList(transactions) 
+                          : <Box width='100%'
+                                 onClick={() => toggleOpen()}
+                                 sx={{p: '0 0 0 450px'}}
+                            >
+                                {`No transactions for this ${determineAttributes(rowObject)[0].title.replace(/( Name)|( ID)/, '').toLowerCase()}`}
+                            </Box>
+                        }
+                    </TableCell>
                   </TableRow>
               }
           </>
